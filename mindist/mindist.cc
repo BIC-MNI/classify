@@ -12,7 +12,7 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: mindist.cc,v $
-$Revision: 1.1 $
+$Revision: 1.1.1.1 $
 $Author: jason $
 $Date: 2002-03-20 22:16:35 $
 $State: Exp $
@@ -28,8 +28,8 @@ $State: Exp $
 @CALLS      : 
 @CREATED    : June 10, 1995 (Vasco KOLLOKIAN)
 @MODIFIED   : $Log: mindist.cc,v $
-@MODIFIED   : Revision 1.1  2002-03-20 22:16:35  jason
-@MODIFIED   : Initial revision
+@MODIFIED   : Revision 1.1.1.1  2002-03-20 22:16:35  jason
+@MODIFIED   : first autoconfiscated version that compiles under linux gcc 3
 @MODIFIED   :
 @MODIFIED   : Revision 1.1.1.1  1997/02/11 00:06:48  alex
 @MODIFIED   : Sources for classify, copied from Vasken Kollokian

@@ -5,8 +5,8 @@
 @CREATED    : February 1, 1993 (Peter Neelin)
 @MODIFIED   : 
  * $Log: time_stamp.c,v $
- * Revision 1.1  2002-03-20 22:16:34  jason
- * Initial revision
+ * Revision 1.1.1.1  2002-03-20 22:16:34  jason
+ * first autoconfiscated version that compiles under linux gcc 3
  *
  * Revision 6.1  2002/01/14 21:28:26  neelin
  * Moved nd_loop, voxel_loop, ParseArgv and time_stamp from ../progs/Proglib
@@ -57,7 +57,7 @@
 #include <time_stamp.h>
 
 #ifndef lint
-static char rcsid[]="$Header: /private-cvsroot/INSECT/classify/time_stamp.c,v 1.1 2002-03-20 22:16:34 jason Exp $";
+static char rcsid[]="$Header: /private-cvsroot/INSECT/classify/time_stamp.c,v 1.1.1.1 2002-03-20 22:16:34 jason Exp $";
 #endif
 
 /* ----------------------------- MNI Header -----------------------------------

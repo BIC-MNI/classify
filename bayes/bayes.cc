@@ -12,7 +12,7 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: bayes.cc,v $
-$Revision: 1.1 $
+$Revision: 1.1.1.1 $
 $Author: jason $
 $Date: 2002-03-20 22:16:35 $
 $State: Exp $
@@ -28,8 +28,8 @@ $State: Exp $
 @CALLS      : 
 @CREATED    : August 21, 1996 (John Sled)
 @MODIFIED   : $Log: bayes.cc,v $
-@MODIFIED   : Revision 1.1  2002-03-20 22:16:35  jason
-@MODIFIED   : Initial revision
+@MODIFIED   : Revision 1.1.1.1  2002-03-20 22:16:35  jason
+@MODIFIED   : first autoconfiscated version that compiles under linux gcc 3
 @MODIFIED   :
 @MODIFIED   : Revision 1.2  2000/08/16 18:18:28  jgsled
 @MODIFIED   : Fixed problem in which the normalization factors for the exponentials

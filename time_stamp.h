@@ -5,8 +5,8 @@
 @CREATED    : February 1, 1993 (Peter Neelin)
 @MODIFIED   : 
  * $Log: time_stamp.h,v $
- * Revision 1.1  2002-03-20 22:16:34  jason
- * Initial revision
+ * Revision 1.1.1.1  2002-03-20 22:16:34  jason
+ * first autoconfiscated version that compiles under linux gcc 3
  *
  * Revision 6.1  2002/01/14 21:28:26  neelin
  * Moved nd_loop, voxel_loop, ParseArgv and time_stamp from ../progs/Proglib
