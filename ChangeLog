@@ -1,0 +1,6 @@
+2005-02-11	Bert Vincent bert@bic.mni.mcgill.ca
+	* Minor change to ann.h for compilation under GCC 3.X
+	* Update version to 1.0.01
+	* Several minor changes to classify.cc to clear up compilation
+	issues.
+	* Get rid of illegal default arguments in typedef in class_proto.h
