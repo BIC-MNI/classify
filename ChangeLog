@@ -4,3 +4,4 @@
 	* Several minor changes to classify.cc to clear up compilation
 	issues.
 	* Get rid of illegal default arguments in typedef in class_proto.h
+	* Minor fixes to cleantag.cc
