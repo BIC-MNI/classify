@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: class_protos.h,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2002-03-20 22:16:34 $
+$Revision: 1.2 $
+$Author: bert $
+$Date: 2005-02-11 20:15:38 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 
@@ -23,7 +23,7 @@ typedef void (*Init_Training)(char *filename);
 typedef void (*Load_Training)(char *filename);
 typedef void (*Save_Training)(char *filename);
 typedef void (*Train)();
-typedef void (*Classify)(int *class_num, Real *class_probs = 0, int *class_labels = 0);
+typedef void (*Classify)(int *class_num, Real *class_probs, int *class_labels);
 
 /* FUNCTION PROTOTYPES */
 
