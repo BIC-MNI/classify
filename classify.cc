@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: classify.cc,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2002-03-20 22:16:34 $
+$Date: 2002-03-20 22:25:06 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -28,8 +28,11 @@ $State: Exp $
 @CALLS      : 
 @CREATED    : May 8, 1995 (Vasco KOLLOKIAN)
 @MODIFIED   : $Log: classify.cc,v $
-@MODIFIED   : Revision 1.1  2002-03-20 22:16:34  jason
-@MODIFIED   : Initial revision
+@MODIFIED   : Revision 1.2  2002-03-20 22:25:06  jason
+@MODIFIED   : added a sadly forgotten configure.ac and took out one debugging line
+@MODIFIED   :
+@MODIFIED   : Revision 1.1.1.1  2002/03/20 22:16:34  jason
+@MODIFIED   : first autoconfiscated version that compiles under linux gcc 3
 @MODIFIED   :
 @MODIFIED   : Revision 1.9  1999/01/14 19:32:50  alex
 @MODIFIED   : Added a few printf statements
@@ -1230,11 +1233,6 @@ void write_classified_volume(void)
   if (verbose) 
     fprintf(stdout,"\nWriting classified volume %s to file ...\n", output_filename);
    
-
-  /* debugging */
-  Real myval = get_volume_real_value(classified_volume, 64,142,90,0,0);
-  printf("%f\n", myval);
-  /* end debuggin */
 
   status = output_modified_volume( output_filename, 
 				   NC_BYTE, 
