@@ -13,7 +13,7 @@
 #@CREATED    : Wed Feb 19, 1997, Louis Collins
 #@MODIFIED   : Thu Dec 12, 1997, Alex Zijdenbos
 #@MODIFIED   : Wed, Mar 21, 2002, Jason Lerch
-#@VERSION    : $Id: classify_clean.pl,v 1.1 2002-03-21 18:01:33 jason Exp $
+#@VERSION    : $Id: classify_clean.pl,v 1.2 2003-11-16 20:49:45 jason Exp $
 #-----------------------------------------------------------------------------
 
 use MNI::Startup;
@@ -222,7 +222,7 @@ sub Initialize
 	["Specific options", "section"],
 	["-version", "call", undef, \&print_version, 
 	 "print version and quit"],
-	["-noclean_tags|-clean_tags", "boolean", 1, \$CleanTags,
+	["-clean_tags|-noclean_tags", "boolean", 1, \$CleanTags,
 	 "do not clean tag file using mindist pre-classification [default; opposite is -clean_tags]"],
 	["-tagfile", "string", 1, \$StandardTags,
 	 "specify the stereotaxic tag file [default: $TagDir$StandardTags]", "<tags.tag>"],

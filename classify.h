@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: classify.h,v $
-$Revision: 1.2 $
+$Revision: 1.3 $
 $Author: jason $
-$Date: 2002-03-28 19:37:00 $
+$Date: 2003-11-16 20:49:45 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #define MD 0
@@ -25,7 +25,16 @@ $State: Exp $
 #define FCM 5
 #define BAY 6
 
-#include <values.h>
+// JPL: values.h does not exist on OS X, so here I'm adding a hack and
+// defining the necessary values myself
+//#include <values.h>
+#include <limits.h>
+#include <float.h>
+#define MAXSHORT   SHRT_MAX
+#define MAXINT     INT_MAX 
+#define MAXDOUBLE  DBL_MAX
+
+  // JPL: end values.h hack
 
 /* GLOBAL VARIABLES */  
 Init_Training init_training = 0;

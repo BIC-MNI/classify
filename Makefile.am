@@ -1,4 +1,4 @@
-SUBDIRS = ann bayes fcm hcm knn mindist scripts models
+SUBDIRS = ann bayes fcm hcm knn mindist scripts models cleantag
 
 EXTRA_DIST = class_globals.h \
 	classify.h \
