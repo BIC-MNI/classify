@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: classify.h,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2002-03-20 22:16:34 $
+$Date: 2002-03-28 19:37:00 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #define MD 0
@@ -286,9 +286,6 @@ ArgvInfo argTable[] = {
 
   {"-ann", ARGV_CONSTANT, (char *) ANN, (char *) &classifier,
      "Use the 'Artificial Neural Network' classifier."},
-
-  {"-c4", ARGV_CONSTANT,  (char *) C45, (char *) &classifier,
-     "Use the 'C4.5 decision Tree' classifier."},
 
   {"-hcm", ARGV_CONSTANT,  (char *) HCM, (char *) &classifier,
      "Use the unsupervised Hard C Means (K-means) classifier."},
