@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT
 AC_CONFIG_SRCDIR([classify.cc])
-AM_INIT_AUTOMAKE(Classify, 0.99)
+AM_INIT_AUTOMAKE(classify, 0.99)
 AM_CONFIG_HEADER(config.h)
 
 AC_PROG_INSTALL
@@ -21,7 +21,10 @@ smr_WITH_BUILD_PATH
 # Check for required C libraries
 mni_REQUIRE_EBTKS
 
+# Find the version of perl 5 in use
+AC_PATH_PROGS(PERL, perl5 perl)
+
 AC_CONFIG_FILES([Makefile ann/Makefile bayes/Makefile fcm/Makefile
-hcm/Makefile knn/Makefile mindist/Makefile])
+hcm/Makefile knn/Makefile mindist/Makefile scripts/Makefile models/Makefile])
 AC_OUTPUT
 

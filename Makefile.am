@@ -1,4 +1,4 @@
-SUBDIRS = ann bayes fcm hcm knn mindist
+SUBDIRS = ann bayes fcm hcm knn mindist scripts models
 
 AUTOMAKE_OPTIONS = check-news
 
