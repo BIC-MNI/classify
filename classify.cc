@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: classify.cc,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 22:25:06 $
+$Revision: 1.3 $
+$Author: bert $
+$Date: 2005-02-11 20:16:15 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -28,7 +28,10 @@ $State: Exp $
 @CALLS      : 
 @CREATED    : May 8, 1995 (Vasco KOLLOKIAN)
 @MODIFIED   : $Log: classify.cc,v $
-@MODIFIED   : Revision 1.2  2002-03-20 22:25:06  jason
+@MODIFIED   : Revision 1.3  2005-02-11 20:16:15  bert
+@MODIFIED   : Minor changes, primarily for compilation issues
+@MODIFIED   :
+@MODIFIED   : Revision 1.2  2002/03/20 22:25:06  jason
 @MODIFIED   : added a sadly forgotten configure.ac and took out one debugging line
 @MODIFIED   :
 @MODIFIED   : Revision 1.1.1.1  2002/03/20 22:16:34  jason
@@ -161,26 +164,28 @@ $State: Exp $
  * Initial revision
  *
 ---------------------------------------------------------------------------- */
+#include "config.h"
 
+#include <iostream>		// (bert) added to force -lCio?
+using namespace std;		// (bert) added
 extern "C" {
 #include <volume_io.h>
 #include "time_stamp.h"
+#include <ParseArgv.h>		// (bert) moved inside extern "C"
 }
-#include <ParseArgv.h>
-#include <time_stamp.h>
 #include <unistd.h>
-#include <class_protos.h>
-#include <classify.h>
-#include <mindist/mindist.h>
-#include <knn/knn.h>
-#include <ann/ann.h>
+#include "class_protos.h"	// (bert) use quotes
+#include "classify.h"		// (bert) use quotes
+#include "mindist/mindist.h"	// (bert) use quotes
+#include "knn/knn.h"		// (bert) use quotes
+#include "ann/ann.h"		// (bert) use quotes
 
 //extern "C" {
 //#include <c4_5.h>
 //}
-#include <hcm/hcm.h>
-#include <fcm/fcm.h>
-#include <bayes/bayes.h>
+#include "hcm/hcm.h"		// (bert) use quotes
+#include "fcm/fcm.h"		// (bert) use quotes
+#include "bayes/bayes.h"	// (bert) use quotes
 
 /* MAIN */
 int main(int argc, char *argv[])
@@ -1705,7 +1710,7 @@ void classify_volume(void)
 	
 	else /* crisp */
 	
-	  classify(&class_val);
+	  classify(&class_val, 0, 0);
 
 	/**********************  E N D  ******************************/
 	
