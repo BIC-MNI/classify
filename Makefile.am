@@ -1,5 +1,10 @@
 SUBDIRS = ann bayes fcm hcm knn mindist scripts models
 
+EXTRA_DIST = class_globals.h \
+	classify.h \
+	class_protos.h \
+	unsuper_globals.h
+
 AUTOMAKE_OPTIONS = check-news
 
 bin_PROGRAMS = classify

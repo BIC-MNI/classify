@@ -88,6 +88,8 @@ install_sh = @install_sh@
 
 noinst_LTLIBRARIES = libknn.la
 
+EXTRA_DIST = knn.h
+
 libknn_la_SOURCES = knn.cc
 subdir = knn
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

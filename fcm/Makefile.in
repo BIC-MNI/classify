@@ -88,6 +88,8 @@ install_sh = @install_sh@
 
 noinst_LTLIBRARIES = libfcm.la
 
+EXTRA_DIST = fcm.h
+
 libfcm_la_SOURCES = fcm.cc
 subdir = fcm
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
