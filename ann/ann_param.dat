@@ -1,0 +1,12 @@
+learning_rate:	0.8
+momentum:	0.3
+temperature:	1.0
+num_of_cycles:	500
+max_error:	0
+max_d_error:	1e-6
+layers:		3 3 10 4
+min_input:	-1
+max_input:	1
+min_target:	0.1
+max_target:	0.9
+

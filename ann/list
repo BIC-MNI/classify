@@ -1,0 +1,11 @@
+Array.c
+Dictionary.c
+FileIO.c
+MString.c
+OrderedCltn.c
+Path.c
+SimpleArray.c
+TrainingSet.c
+ann.c
+backProp.c
+popen.c
