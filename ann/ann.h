@@ -12,15 +12,16 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: ann.h,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2002-03-20 22:16:34 $
+$Revision: 1.2 $
+$Author: bert $
+$Date: 2005-02-11 20:19:31 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _ANN_H
 #define _ANN_H
 
-#include <iostream.h>
+#include <iostream>		/* (bert) changed from iostream */
+using namespace std;		/* (bert) added */
 
 void ann_init_training(char *filename);
 void ann_load_training(char *filename);
