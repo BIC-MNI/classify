@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: classify.h,v $
-$Revision: 1.3 $
-$Author: jason $
-$Date: 2003-11-16 20:49:45 $
+$Revision: 1.4 $
+$Author: bert $
+$Date: 2005-02-11 20:15:49 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #define MD 0
@@ -133,7 +133,18 @@ int        num_train_vols = 0;              /* number of training volumes specif
 
 /* ARGTABLE */
 
+#ifdef __DATE__
+#ifdef __TIME__
+#define VERSIONSTR VERSION " built " __DATE__ " " __TIME__
+#else
+#define VERSIONSTR VERSION " built " __DATE__
+#endif /* __TIME__ not defined */
+#else
+#define VERSIONSTR VERSION
+#endif /* __DATE__ not defined */
+
 ArgvInfo argTable[] = {
+  { NULL, ARGV_VERINFO, VERSIONSTR, NULL, "" },
 
   {NULL, ARGV_HELP, NULL, NULL,
      "\nOptions to specify verbosity and clobbering.\n"},
