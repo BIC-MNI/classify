@@ -19,6 +19,7 @@ AC_PROG_LIBTOOL
 smr_WITH_BUILD_PATH
 
 # Check for required C libraries
+mni_REQUIRE_VOLUMEIO
 mni_REQUIRE_EBTKS
 
 # Find the version of perl 5 in use
