@@ -10,6 +10,8 @@
 @CREATED    : Nov 4, 1995 (Vasco KOLLOKIAN)
 @MODIFIED   : 
 ---------------------------------------------------------------------------- */
+#include "config.h"
+
 extern "C" {
 #include <volume_io.h>
 }
@@ -65,6 +67,7 @@ int        fuzz_vol;                    /* index to  number of fuzzy volumes */
 int        block_sizes[3] = { 1, 1, 1}; /* set the block size for vol. cache */
 
 ArgvInfo argTable[] = {
+  { NULL, ARGV_VERINFO, VERSION, NULL, NULL },
   {"-verbose", ARGV_CONSTANT, (char *) TRUE, (char *) &verbose,
      "Show progress"},
   
@@ -402,7 +405,7 @@ void scan_and_clean_tags( char *clean_mode )
 
     /* if a mask is specified, check whether the tag point is in the mask */
     if (mask_filename) {
-      mask_value = get_volume_real_value( mask_volume, v1, v2, v3, 0, 0);
+      mask_value = get_volume_real_value( mask_volume, ROUND(v1), ROUND(v2), ROUND(v3), 0, 0);
       
       if ((mask_value < mask_min) || (mask_value > mask_max)) {
 	accept = FALSE;
