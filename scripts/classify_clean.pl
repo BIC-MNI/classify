@@ -13,7 +13,7 @@
 #@CREATED    : Wed Feb 19, 1997, Louis Collins
 #@MODIFIED   : Thu Dec 12, 1997, Alex Zijdenbos
 #@MODIFIED   : Wed, Mar 21, 2002, Jason Lerch
-#@VERSION    : $Id: classify_clean.pl,v 1.3 2004-01-23 19:32:12 jason Exp $
+#@VERSION    : $Id: classify_clean.pl,v 1.4 2006-04-04 18:48:48 claude Exp $
 #-----------------------------------------------------------------------------
 
 use MNI::Startup;
@@ -329,7 +329,7 @@ sub Initialize
        
        if ($MaskClassified) {
 	   # Force classify to use the mask
-	   AddDefaultArgs('classify', ['-mask', $Mask]);
+	   AddDefaultArgs('classify', ['-mask', $Mask, '-user_mask_value', 0.50 ]);
        }
        
        if ($MaskTag) {

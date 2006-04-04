@@ -1,3 +1,7 @@
+2006-04-04	Claude Lepage claude@bic.mni.mcgill.ca
+	* Add -user_mask_value 0.50 in classify_clean for safe brain mask thresholding
+	* Update version to 1.0.02
+
 2005-02-11	Bert Vincent bert@bic.mni.mcgill.ca
 	* Minor change to ann.h for compilation under GCC 3.X
 	* Update version to 1.0.01

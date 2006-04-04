@@ -1,3 +1,7 @@
+New in Release 1.0.02
+
+* Add -user_mask_value 0.50 in classify_clean for safe brain mask thresholding
+
 New in Release 1.0.01
 
 * Fix compilation on newer versions of GCC.
