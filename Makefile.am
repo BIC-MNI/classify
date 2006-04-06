@@ -8,7 +8,8 @@ EXTRA_DIST = class_globals.h \
 	m4/smr_REQUIRED_LIB.m4 \
 	m4/smr_OPTIONAL_LIB.m4 \
 	m4/mni_REQUIRE_LIB.m4 \
-	m4/mni_REQUIRE_MNILIBS.m4 
+	m4/mni_REQUIRE_MNILIBS.m4 \
+	epm-header.in
 
 AUTOMAKE_OPTIONS = check-news
 

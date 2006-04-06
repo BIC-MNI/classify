@@ -2,8 +2,12 @@
 
 set -e
 
+# add libtool stuff
+libtoolize --force --copy
+
+# normal automake/conf bits
 aclocal -I m4
 autoheader
-automake --add-missing
+automake --add-missing --copy
 autoconf
 

@@ -28,5 +28,5 @@ AC_PATH_PROGS(PERL, perl5 perl)
 AC_CONFIG_FILES([Makefile ann/Makefile bayes/Makefile fcm/Makefile
 hcm/Makefile knn/Makefile mindist/Makefile scripts/Makefile models/Makefile
 cleantag/Makefile])
-AC_OUTPUT
+AC_OUTPUT(epm-header)
 

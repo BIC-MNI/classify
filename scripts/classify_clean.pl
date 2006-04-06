@@ -13,7 +13,7 @@
 #@CREATED    : Wed Feb 19, 1997, Louis Collins
 #@MODIFIED   : Thu Dec 12, 1997, Alex Zijdenbos
 #@MODIFIED   : Wed, Mar 21, 2002, Jason Lerch
-#@VERSION    : $Id: classify_clean.pl,v 1.4 2006-04-04 18:48:48 claude Exp $
+#@VERSION    : $Id: classify_clean.pl,v 1.5 2006-04-06 21:28:14 rotor Exp $
 #-----------------------------------------------------------------------------
 
 use MNI::Startup;
@@ -280,7 +280,9 @@ sub Initialize
        $ClassifyOpt =~ s/,/ /g;
        $ClassifyOpt =~ s/::/ /g;
 
-       AddDefaultArgs('classify', $ClassifyOpt);
+       foreach (split(/\ /, $ClassifyOpt)){
+           AddDefaultArgs('classify', $_);
+       }
    }
 
    @Infiles = @argv;
