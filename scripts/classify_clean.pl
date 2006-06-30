@@ -13,7 +13,7 @@
 #@CREATED    : Wed Feb 19, 1997, Louis Collins
 #@MODIFIED   : Thu Dec 12, 1997, Alex Zijdenbos
 #@MODIFIED   : Wed, Mar 21, 2002, Jason Lerch
-#@VERSION    : $Id: classify_clean.pl,v 1.5 2006-04-06 21:28:14 rotor Exp $
+#@VERSION    : $Id: classify_clean.pl,v 1.6 2006-06-30 22:05:11 alex Exp $
 #-----------------------------------------------------------------------------
 
 use MNI::Startup;
@@ -38,10 +38,14 @@ my $MaskBinValue   = undef;
 my $MaskTag        = 0;
 my $MaskClassified = 0;
 my $MaskCerebellum = 0;
+my $TagXfm         = undef;
+my $InvertTagXfm   = 0;
 
 my $TagDir         = MNI::DataDir::dir('classify');
 my $BackgroundTags = 'ntags_1000_bg.tag';
 my $StandardTags   = 'ntags_1000_prob_90_nobg.tag';
+my $NewFGTags      = undef;
+my $NewBGTags      = undef;
 my $ICBM           = MNI::DataDir::dir('ICBM');
 my $CerebellumMask = 'icbm_atlas_cerebellum_avg_53_mask_1mm.mnc';
 my $MergeFile      = undef;
@@ -224,13 +228,24 @@ sub Initialize
 	 "print version and quit"],
 	["-clean_tags|-noclean_tags", "boolean", 1, \$CleanTags,
 	 "clean tag file using mindist pre-classification [default is -noclean_tags]"],
-	["-tagfile", "string", 1, \$StandardTags,
-	 "specify the stereotaxic tag file [default: $TagDir$StandardTags]", "<tags.tag>"],
+	["-tagdir", "string", 1, \$TagDir,
+	 "specify the directory containing the standard tag files [default: $TagDir]", "<dir>"],
+	["-tagfile", "string", 1, \$NewFGTags,
+	 "specify an alternate foreground tag file [default: $TagDir$StandardTags]", "<tags.tag>"],
+	["-bgtagfile", "string", 1, \$NewBGTags,
+	 "specify an alternate background tag file [default: $TagDir$BackgroundTags]", "<bgtags.tag>"],
 	["-cleanedtagfile", "string", 1, \$CleanedTags,
 	 "save the cleaned tags in <tags.tag>", "<tags.tag>"],
 	["-classify", "string", 1, \$ClassifyOpt,
 	 "specify options to pass directly to classify (quoted, comma- or '::'- separated list)", "'<options>'"],
 	
+	["Transform options", "section"],
+	["-tag_transform", "string", 1, \$TagXfm,
+	 "specify a transform to apply to the foreground tag file prior to classification.", "<tags.xfm>"],
+	["-invert_tag_transform|-noinvert_tag_transform", "boolean", 1, 
+	 \$InvertTagXfm,
+	 "invert the tag transform [default is -noinvert_tag_transform]"],
+
 	["Mask options", "section"],
 	["-mask", "string", 1, \$Mask,
 	 "specify a mask volume", "<mask.mnc>"],
@@ -242,6 +257,7 @@ sub Initialize
 	 "apply mask to intermediate and final classified volumes [default: -nomask_classified]"],
 	["-mask_cerebellum|-nomask_cerebellum", "boolean", 1, \$MaskCerebellum,
 	 "remove cerebellar tags from standard set prior to classification"],
+
 	["Merge options", "section"],
 	["-merge", "string", 1, \$MergeFile,
 	 "merge the argument file into the final classification. This implies first masking the classification with the background (0) of this file, and subsequently adding it in. Volume <merge.mnc> must be discrete (a label volume)", "<merge.mnc>"],
@@ -267,7 +283,8 @@ sub Initialize
    MNI::Spawn::SetOptions (strict => 2);
    
    # Register required programs
-   RegisterPrograms([qw(classify cleantag minclookup mincmath)]) || die;
+   RegisterPrograms([qw(classify cleantag minclookup mincmath transform_tags)])
+       || die;
    
    # They were found, so add options according to
    # $Debug, $Verbose, $Clobber flags
@@ -302,10 +319,22 @@ sub Initialize
    }
 
    # Verify tag files
-   MNI::DataDir::check_data($TagDir, [$BackgroundTags, $StandardTags]);
-   $BackgroundTags = "${TagDir}${BackgroundTags}";
-   $StandardTags   = "${TagDir}${StandardTags}";
-   
+   $StandardTags = 
+       (defined $NewFGTags) ? $NewFGTags : "${TagDir}/${StandardTags}";
+   $BackgroundTags = 
+       (defined $NewBGTags) ? $NewBGTags : "${TagDir}/${BackgroundTags}";
+
+   check_files($StandardTags, $BackgroundTags) || die;
+
+   # Transform tags if requested
+   if (defined $TagXfm) {
+       my $transformed_tags = "${TmpDir}transformed_tags.tag";
+       my @cmd = ('transform_tags', $StandardTags, $TagXfm, $transformed_tags);
+       push @cmd, '1' if $InvertTagXfm;
+       Spawn(\@cmd);
+       $StandardTags = $transformed_tags;
+   }
+
    # Verify cerebellar mask and mask standard tags
    if ($MaskCerebellum) {
        MNI::DataDir::check_data($ICBM, [$CerebellumMask]);
