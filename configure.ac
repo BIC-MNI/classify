@@ -22,11 +22,14 @@ smr_WITH_BUILD_PATH
 mni_REQUIRE_VOLUMEIO
 mni_REQUIRE_EBTKS
 
-# Find the version of perl 5 in use
-AC_PATH_PROGS(PERL, perl5 perl)
+# Find the version of perl in use
+AC_PATH_PROGS(PERL, perl)
 
 AC_CONFIG_FILES([Makefile ann/Makefile bayes/Makefile fcm/Makefile
 hcm/Makefile knn/Makefile mindist/Makefile scripts/Makefile models/Makefile
 cleantag/Makefile])
-AC_OUTPUT(epm-header)
-
+AC_OUTPUT(
+epm-header
+scripts/classify_clean
+scripts/insect
+)
