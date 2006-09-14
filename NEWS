@@ -1,3 +1,8 @@
+New in Release 1.0.04
+
+* Initialize fuzzy volume to zero (was sometimes creating a
+  blank line in the output when using a mask)
+
 New in Release 1.0.03
 
 * clean-up perl scripts (.pl to .in, DataDir, xPERLx)

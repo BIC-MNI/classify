@@ -1,3 +1,8 @@
+2006-09-14      Samir Das samir@bic.mni.mcgill.ca
+        * Initialize fuzzy volume to zero (was sometimes creating a
+          blank line in the output when using a mask)
+        * Update version to 1.0.04
+
 2006-05-04	Claude Lepage claude@bic.mni.mcgill.ca
 	* clean-up perl scripts (.pl to .in, DataDir, xPERLx)
 	* Update version to 1.0.03

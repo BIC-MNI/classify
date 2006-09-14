@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: classify.cc,v $
-$Revision: 1.5 $
+$Revision: 1.6 $
 $Author: claude $
-$Date: 2006-09-14 19:37:52 $
+$Date: 2006-09-14 19:47:25 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -28,8 +28,11 @@ $State: Exp $
 @CALLS      : 
 @CREATED    : May 8, 1995 (Vasco KOLLOKIAN)
 @MODIFIED   : $Log: classify.cc,v $
-@MODIFIED   : Revision 1.5  2006-09-14 19:37:52  claude
-@MODIFIED   : fix missing files not committed in 1.0.03
+@MODIFIED   : Revision 1.6  2006-09-14 19:47:25  claude
+@MODIFIED   : initialize fuzzy volume to zero
+@MODIFIED   :
+@MODIFIED   : Revision 1.4  2006/09/14 19:04:23  claude
+@MODIFIED   : initialize fuzzy volume to zero
 @MODIFIED   :
 @MODIFIED   : Revision 1.3  2005/02/11 20:16:15  bert
 @MODIFIED   : Minor changes, primarily for compilation issues
@@ -1365,52 +1368,58 @@ void initialize_fuzzy_volumes(void)
 {
 
   int    k;
-
-
+    
   ALLOC( fuzzy_volume, num_classes );
-
+    
   /* create the fuzzy volume here */   
   for_less( k, 0, num_classes) {
-   
+  
+    printf("create_fuzzy_volume[k] = %d\n", create_fuzzy_volume[k]);
+  
     if ( create_fuzzy_volume[k] != 0 ) {
-
+  
       if (verbose) { 
-
-	fprintf(stdout, "creating fuzzy volume for class %s\n", class_name[k]);
+        fprintf(stdout, "creating fuzzy volume for class %s\n", class_name[k]);
       }
 
       fuzzy_volume[k] = copy_volume_definition(in_volume[0],
-					       fuzzy_type,
-					       FALSE,
-					       fuzzy_voxel_min, 
-					       fuzzy_voxel_max);
-
+                                               fuzzy_type,
+                                               FALSE,
+                                               fuzzy_voxel_min, 
+                                               fuzzy_voxel_max);
+  
       set_volume_voxel_range(fuzzy_volume[k], fuzzy_voxel_min, fuzzy_voxel_max); 
       set_volume_real_range(fuzzy_volume[k], fuzzy_image_min, fuzzy_image_max);
-
-
+  
+      Real bg = 0.0;    
+      for( v1_ptr = 0; v1_ptr < first_volume_sizes[0]; v1_ptr++ ) {
+        for( v2_ptr = 0; v2_ptr < first_volume_sizes[1]; v2_ptr++ ) {
+          for( v3_ptr = 0; v3_ptr < first_volume_sizes[2]; v3_ptr++ ) {
+            set_volume_real_value(fuzzy_volume[k],
+                                  v1_ptr, v2_ptr, v3_ptr,
+                                  0, 0, bg );
+          } // end for v3_ptr
+        } // end for v2_ptr
+      } // end for v1_ptr
+  
       if ( cache_set ) {
-	set_cache_output_volume_parameters(fuzzy_volume[k],
-					   fuzzy_filename[k],
-					   fuzzy_type, 
-					   FALSE, 
-					   fuzzy_voxel_min, 
-					   fuzzy_voxel_max,
-					   input_filename[0], 
-					   history, 
-					   (minc_output_options *) NULL ) ;
-
-
+        set_cache_output_volume_parameters(fuzzy_volume[k],
+                                           fuzzy_filename[k],
+                                           fuzzy_type, 
+                                           FALSE, 
+                                           fuzzy_voxel_min, 
+                                           fuzzy_voxel_max,
+                                           input_filename[0], 
+                                           history, 
+                                           (minc_output_options *) NULL ) ;
 
       } /* if ( cache_set ) */
 
     } /* if ( create_fuzzy ...) */
 
   } /* for_less */
-            
-            
+	
 } /* initialize_fuzzy_volumes */
-
 
 
 /* ----------------------------- MNI Header -----------------------------------
@@ -1665,15 +1674,12 @@ void classify_volume(void)
 					      v2_ptr, 
 					      v3_ptr,
 					      0,0);
-
-
-	  
+  
 	  if (  mask_value <  user_mask_value ) {
-
+	
 	    class_val = user_mask_class;
 	    goto WRITE_VOXEL;
 	  }
-
 	}
 	 
 	/*********************  S T A R T  ***************************/
@@ -1691,6 +1697,7 @@ void classify_volume(void)
 
 	    if ( debug > 31 ) 
 	      fprintf(stdout, "%f, ", class_probs[k] ) ; 
+
 
 	    /* debug value of 100 is to test the volume cache - is temp */
 	    if ( create_fuzzy_volume[k] != 0 && debug < 100) {    
@@ -1725,7 +1732,7 @@ void classify_volume(void)
 				    v3_ptr,
 				    0,0,
 				    class_val );
-	  
+
       } /* for_less v3_ptr */
 
     } /* for_less v2_ptr */
