@@ -1,3 +1,8 @@
+2006-09-14	Samir Das samir@bic.mni.mcgill.ca
+	* Initialize fuzzy volume to zero (was sometimes creating a
+	  blank line in the output when using a mask)
+	* Update version to 1.0.03
+
 2006-04-04	Claude Lepage claude@bic.mni.mcgill.ca
 	* Add -user_mask_value 0.50 in classify_clean for safe brain mask thresholding
 	* Update version to 1.0.02
