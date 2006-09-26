@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: classify.cc,v $
-$Revision: 1.6 $
+$Revision: 1.7 $
 $Author: claude $
-$Date: 2006-09-14 19:47:25 $
+$Date: 2006-09-26 18:42:31 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -28,7 +28,10 @@ $State: Exp $
 @CALLS      : 
 @CREATED    : May 8, 1995 (Vasco KOLLOKIAN)
 @MODIFIED   : $Log: classify.cc,v $
-@MODIFIED   : Revision 1.6  2006-09-14 19:47:25  claude
+@MODIFIED   : Revision 1.7  2006-09-26 18:42:31  claude
+@MODIFIED   : switched initialization of fuzzy volume after cache_set stuff, otherwise minc will not write fuzzy volume - strange
+@MODIFIED   :
+@MODIFIED   : Revision 1.6  2006/09/14 19:47:25  claude
 @MODIFIED   : initialize fuzzy volume to zero
 @MODIFIED   :
 @MODIFIED   : Revision 1.4  2006/09/14 19:04:23  claude
@@ -1390,18 +1393,7 @@ void initialize_fuzzy_volumes(void)
   
       set_volume_voxel_range(fuzzy_volume[k], fuzzy_voxel_min, fuzzy_voxel_max); 
       set_volume_real_range(fuzzy_volume[k], fuzzy_image_min, fuzzy_image_max);
-  
-      Real bg = 0.0;    
-      for( v1_ptr = 0; v1_ptr < first_volume_sizes[0]; v1_ptr++ ) {
-        for( v2_ptr = 0; v2_ptr < first_volume_sizes[1]; v2_ptr++ ) {
-          for( v3_ptr = 0; v3_ptr < first_volume_sizes[2]; v3_ptr++ ) {
-            set_volume_real_value(fuzzy_volume[k],
-                                  v1_ptr, v2_ptr, v3_ptr,
-                                  0, 0, bg );
-          } // end for v3_ptr
-        } // end for v2_ptr
-      } // end for v1_ptr
-  
+ 
       if ( cache_set ) {
         set_cache_output_volume_parameters(fuzzy_volume[k],
                                            fuzzy_filename[k],
@@ -1414,6 +1406,17 @@ void initialize_fuzzy_volumes(void)
                                            (minc_output_options *) NULL ) ;
 
       } /* if ( cache_set ) */
+
+      Real bg = 0.0;    
+      for( v1_ptr = 0; v1_ptr < first_volume_sizes[0]; v1_ptr++ ) {
+        for( v2_ptr = 0; v2_ptr < first_volume_sizes[1]; v2_ptr++ ) {
+          for( v3_ptr = 0; v3_ptr < first_volume_sizes[2]; v3_ptr++ ) {
+            set_volume_real_value(fuzzy_volume[k],
+                                  v1_ptr, v2_ptr, v3_ptr,
+                                  0, 0, bg );
+          } // end for v3_ptr
+        } // end for v2_ptr
+      } // end for v1_ptr
 
     } /* if ( create_fuzzy ...) */
 
@@ -1451,7 +1454,6 @@ void write_fuzzy_volumes(void)
       if (verbose) 
 	fprintf(stdout,"Writing fuzzy volume %s to file ...\n", fuzzy_filename[i]);
     
-
       status = output_modified_volume(fuzzy_filename[i],
 			     fuzzy_type, 
 			     FALSE, 
