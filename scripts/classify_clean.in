@@ -13,7 +13,7 @@
 #@CREATED    : Wed Feb 19, 1997, Louis Collins
 #@MODIFIED   : Thu Dec 12, 1997, Alex Zijdenbos
 #@MODIFIED   : Wed, Mar 21, 2002, Jason Lerch
-#@VERSION    : $Id: classify_clean.in,v 1.1 2006-09-14 19:37:53 claude Exp $
+#@VERSION    : $Id: classify_clean.in,v 1.2 2006-11-03 16:10:52 claude Exp $
 #-----------------------------------------------------------------------------
 
 use MNI::Startup;
@@ -40,6 +40,7 @@ my $MaskBinValue   = undef;
 my $MaskTag        = 0;
 my $MaskClassified = 0;
 my $MaskCerebellum = 0;
+my $TagTransform   = undef;
 
 my $TagDir         = "$FindBin::Bin/../share/classify/";
 #my $TagDir         = MNI::DataDir::dir('classify');
@@ -246,6 +247,9 @@ sub Initialize
 	 "apply mask to intermediate and final classified volumes [default: -nomask_classified]"],
 	["-mask_cerebellum|-nomask_cerebellum", "boolean", 1, \$MaskCerebellum,
 	 "remove cerebellar tags from standard set prior to classification"],
+        ["-tag_transform", "string", 1, \$TagTransform,
+         "non-linear transformation to map the tags from stereotaxic space to subject",
+         "<nl_transform.xfm>"],
 	["Merge options", "section"],
 	["-merge", "string", 1, \$MergeFile,
 	 "merge the argument file into the final classification. This implies first masking the classification with the background (0) of this file, and subsequently adding it in. Volume <merge.mnc> must be discrete (a label volume)", "<merge.mnc>"],
@@ -271,7 +275,7 @@ sub Initialize
    MNI::Spawn::SetOptions (strict => 2);
    
    # Register required programs
-   RegisterPrograms([qw(classify cleantag minclookup mincmath)]) || die;
+   RegisterPrograms([qw(transform_tags classify cleantag minclookup mincmath)]) || die;
    
    # They were found, so add options according to
    # $Debug, $Verbose, $Clobber flags
@@ -309,7 +313,17 @@ sub Initialize
    MNI::DataDir::check_data($TagDir, [$BackgroundTags, $StandardTags]);
    $BackgroundTags = "${TagDir}${BackgroundTags}";
    $StandardTags   = "${TagDir}${StandardTags}";
-   
+
+   # Apply non-linear transformation to tag points.
+   if (defined($TagTransform)) {
+       Spawn(['transform_tags', $StandardTags, $TagTransform, 
+              "${TmpDir}nltransf_tag.tag", 'invert']);
+       $StandardTags = "${TmpDir}nltransf_tag.tag";
+       Spawn(['transform_tags', $BackgroundTags, $TagTransform, 
+              "${TmpDir}nltransf_bgtag.tag", 'invert']);
+       $BackgroundTags = "${TmpDir}nltransf_bgtag.tag";
+   }
+
    # Verify cerebellar mask and mask standard tags
    if ($MaskCerebellum) {
        MNI::DataDir::check_data($ICBM, [$CerebellumMask]);
