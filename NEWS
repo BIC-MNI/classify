@@ -1,3 +1,6 @@
+New in Release 1.0.07
+* Disable volume caching for classify (caching fails in minc2)
+
 New in Release 1.0.06
 * Add a directory for tag points in classify_clean
 
