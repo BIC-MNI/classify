@@ -1,3 +1,7 @@
+2007-10-29      Claude Lepage claude@bic.mni.mcgill.ca
+	* Add option to mask out background from intensity image for
+          a much better classification when background is very noisy.
+
 2007-09-14      Claude Lepage claude@bic.mni.mcgill.ca
 	* Disable volume caching for classify (caching fails in minc2)
 

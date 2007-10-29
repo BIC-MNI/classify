@@ -13,7 +13,7 @@
 #@CREATED    : Wed Feb 19, 1997, Louis Collins
 #@MODIFIED   : Thu Dec 12, 1997, Alex Zijdenbos
 #@MODIFIED   : Wed, Mar 21, 2002, Jason Lerch
-#@VERSION    : $Id: classify_clean.in,v 1.4 2007-09-14 19:06:49 claude Exp $
+#@VERSION    : $Id: classify_clean.in,v 1.5 2007-10-29 21:11:28 claude Exp $
 #-----------------------------------------------------------------------------
 
 use MNI::Startup;
@@ -26,6 +26,7 @@ use Getopt::Tabular;
 use strict;
 use warnings "all";
 use FindBin;
+use File::Basename;
 
 # ------------------------------ start here
 
@@ -40,6 +41,7 @@ my $MaskBinValue   = undef;
 my $MaskTag        = 0;
 my $MaskClassified = 0;
 my $MaskCerebellum = 0;
+my $MaskSource     = 0;
 my $TagTransform   = undef;
 
 my $TagDir         = "$FindBin::Bin/../share/classify";
@@ -253,6 +255,8 @@ sub Initialize
 	 "apply mask to intermediate and final classified volumes [default: -nomask_classified]"],
 	["-mask_cerebellum|-nomask_cerebellum", "boolean", 1, \$MaskCerebellum,
 	 "remove cerebellar tags from standard set prior to classification"],
+	["-mask_source|-nomask_source", "boolean", 1, \$MaskSource,
+	 "apply mask to source images prior to classification [default: -nomask_source]"],
         ["-tag_transform", "string", 1, \$TagTransform,
          "non-linear transformation to map the tags from stereotaxic space to subject",
          "<nl_transform.xfm>"],
@@ -341,8 +345,9 @@ sub Initialize
    }       
    
    if (defined($Mask)) {
-       if (!$MaskTag && !$MaskClassified) {
-	   die "Mask ${Mask} not used;\n  please specify -mask_tag and/or -mask_classify\n";
+       if (!$MaskTag && !$MaskClassified && !$MaskSource) {
+	   die "Mask ${Mask} not used;\n  please specify -mask_tag and/or -mask_classified\n" .
+               "and/or -mask_source\n";
        }
        
        if (defined($MaskBinValue)) {
@@ -362,6 +367,16 @@ sub Initialize
        if ($MaskTag) {
 	   $StandardTags = 
 	       &mask_tags($StandardTags, $Mask, 1, "${TmpDir}masked_standard.tag");
+       }
+
+       if ($MaskSource) {
+           for( my $i = 0; $i <= $#Infiles; $i++ ){ 
+               my $masked_image = &basename($Infiles[$i]);
+               $masked_image =~ s/\.mnc(.gz)?$/\_masked.mnc/;
+               $masked_image = "${TmpDir}/${masked_image}";
+	       Spawn(['mincmath', '-mult', $Infiles[$i], $Mask, $masked_image]);
+               $Infiles[$i] = $masked_image;
+           }
        }
    }
    elsif ($MaskTag || $MaskClassified) {

@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT
 AC_CONFIG_SRCDIR([classify.cc])
-AM_INIT_AUTOMAKE(classify, 1.0.07)
+AM_INIT_AUTOMAKE(classify, 1.0.08)
 AM_CONFIG_HEADER(config.h)
 
 AC_PROG_INSTALL
