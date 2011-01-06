@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([classify],[1.1.0],[Alex Zijdenbos <zijdenbos@gmail.com>])
+AC_INIT([classify],[1.1.1],[Alex Zijdenbos <zijdenbos@gmail.com>])
 AC_CONFIG_SRCDIR([classify.cc])
 
 AM_INIT_AUTOMAKE
