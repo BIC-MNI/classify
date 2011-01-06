@@ -19,7 +19,9 @@ EXTRA_DIST = \
 
 AUTOMAKE_OPTIONS = check-news
 
-bin_PROGRAMS = classify
+bin_PROGRAMS = classify voldiff
+
+voldiff_SOURCES = voldiff.c
 
 classify_SOURCES = time_stamp.c classify.cc
 
