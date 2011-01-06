@@ -1,22 +1,25 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT
+AC_INIT([classify],[1.1.0],[Alex Zijdenbos <zijdenbos@gmail.com>])
 AC_CONFIG_SRCDIR([classify.cc])
-AM_INIT_AUTOMAKE(classify, 1.1)
-AM_CONFIG_HEADER(config.h)
 
-AC_PROG_INSTALL
-AC_PROG_LN_S
-AC_PROG_MAKE_SET
+AM_INIT_AUTOMAKE
+AC_CONFIG_HEADERS([config.h])
+
+# this macro eases building the package: see m4/README
+smr_WITH_BUILD_PATH
 
 AC_PROG_CC
 AC_PROG_CXX
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
 
 dnl Build only static libs by default
 AC_DISABLE_SHARED
 AC_PROG_LIBTOOL
 
-smr_WITH_BUILD_PATH
+AC_CONFIG_MACRO_DIR([m4])
 
 # Check for required C libraries
 mni_REQUIRE_VOLUMEIO

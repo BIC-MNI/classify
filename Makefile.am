@@ -1,5 +1,7 @@
 SUBDIRS = ann bayes fcm hcm knn mindist scripts models cleantag
 
+ACLOCAL_AMFLAGS = -I m4
+
 m4_files = m4/mni_REQUIRE_LIB.m4 \
            m4/mni_REQUIRE_MNILIBS.m4 \
            m4/mni_REQUIRE_OPENINVENTOR.m4 \

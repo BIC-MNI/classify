@@ -1,5 +1,6 @@
-New in Release 1.1
+New in Release 1.1.0
 * added voldiff
+* minor build/config changes
 
 New in Release 1.0.09
 * Copy BIC/MINC license already in sources in COPYING file
