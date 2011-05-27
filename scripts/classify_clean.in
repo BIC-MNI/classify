@@ -13,7 +13,7 @@
 #@CREATED    : Wed Feb 19, 1997, Louis Collins
 #@MODIFIED   : Thu Dec 12, 1997, Alex Zijdenbos
 #@MODIFIED   : Wed, Mar 21, 2002, Jason Lerch
-#@VERSION    : $Id: classify_clean.in,v 1.5 2007-10-29 21:11:28 claude Exp $
+#@VERSION    : $Id: classify_clean.in,v 1.6 2011-05-27 20:47:01 claude Exp $
 #-----------------------------------------------------------------------------
 
 use MNI::Startup;
@@ -154,7 +154,7 @@ sub compute_final_classification {
 
     my $output = (defined $MergeFile) ? "${TmpDir}temp_classified_1.mnc" : $classified;
     
-    Spawn(['classify', '-ann',  '-tagfile', $tags, @infiles, $output]);
+    Spawn(['classify', '-nocache', '-ann', '-tagfile', $tags, @infiles, $output]);
 #         "-fuzzy '011111' -fpath ${TmpDir}/ -fprefix ${filebase}_final ".
 
     if (defined $MergeFile) {

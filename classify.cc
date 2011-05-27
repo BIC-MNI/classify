@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: classify.cc,v $
-$Revision: 1.7 $
+$Revision: 1.8 $
 $Author: claude $
-$Date: 2006-09-26 18:42:31 $
+$Date: 2011-05-27 20:47:01 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -28,6 +28,9 @@ $State: Exp $
 @CALLS      : 
 @CREATED    : May 8, 1995 (Vasco KOLLOKIAN)
 @MODIFIED   : $Log: classify.cc,v $
+@MODIFIED   : Revision 1.8  2011-05-27 20:47:01  claude
+@MODIFIED   : mostly fixes for memory bugs
+@MODIFIED   :
 @MODIFIED   : Revision 1.7  2006-09-26 18:42:31  claude
 @MODIFIED   : switched initialization of fuzzy volume after cache_set stuff, otherwise minc will not write fuzzy volume - strange
 @MODIFIED   :
@@ -367,8 +370,8 @@ int main(int argc, char *argv[])
   if ( fuzzy || classifier == FCM)
     write_fuzzy_volumes();
 
-  /* this is for testing memory leaks, and may not be necessary to call 
-  cleanup_memory(); */
+  /* this is for testing memory leaks, and may not be necessary to call */
+  cleanup_memory();
 
   return(EXIT_SUCCESS);
 
@@ -1115,7 +1118,7 @@ void create_feature_matrix_from_tagfile(void)
 	if ( class_name[j] == NULL ) {
 
 	  /* reserve space for the class name */
-	  ALLOC( class_name[j], strlen( labels[i] ) );
+	  ALLOC( class_name[j], strlen( labels[i] ) + 1 );
 	  strcpy( class_name[j], labels[i] );
 	}
 
@@ -1300,7 +1303,7 @@ void decide_fuzzy_volumes(void){
   if ( !fuzzy_prefix ) {
 
     char fuzzy_name[] = "fuzzy_class";
-    ALLOC( fuzzy_prefix, strlen(fuzzy_name));
+    ALLOC( fuzzy_prefix, strlen(fuzzy_name)+1);
     strcpy( fuzzy_prefix, fuzzy_name );
 
   }
@@ -1761,9 +1764,9 @@ void cleanup_memory(void)
 
   int loop_idx;
 
-  /* get rid of input filenames */
-  for_less( loop_idx, 0, num_features )
-    FREE( input_filename[loop_idx]);
+  /* get rid of input filenames array (filenames themselves are
+     from argv and cannot be freed) */
+  FREE( input_filename );
 
   /* get rid of class names */
   for_less( loop_idx, 0, num_classes ) 
@@ -1771,7 +1774,7 @@ void cleanup_memory(void)
   FREE( class_name );
 
   FREE( feature_vector );
-  FREE2D( first_volume_sizes );
+  FREE( first_volume_sizes );
 
   if ( supervised && tagfile_filename) {
 
@@ -1780,6 +1783,12 @@ void cleanup_memory(void)
   }
 
   FREE( class_count );
+
+  for_less ( loop_idx, 0, first_volume_num_dims ) {
+    FREE( first_volume_dim_names[loop_idx] );
+  }
+  FREE( first_volume_dim_names );
+  first_volume_num_dims = 0;
 
   /* now clean the feature volumes */
   for_less( loop_idx, 0, num_features ) {
@@ -1799,7 +1808,6 @@ void cleanup_memory(void)
   /* now free tag points */
   free_tag_points(n_tag_volumes, num_samples,
 		  tags, NULL, NULL, NULL, NULL, labels );
-
 
   /* dump unreleased memory to a file */
   if ( debug >= 10 ) {

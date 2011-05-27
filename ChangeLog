@@ -1,6 +1,12 @@
+2011-05-27      Claude Lepage claude@bic.mni.mcgill.ca
+	* Add -nocache to ANN classification in classify_clean
+	* Fix memory problem in ann/ann.cc for missing classes
+	* Fix string length (from strlen) to add 1 for '\0'
+	* Clean up memory after usage in classify.cc
+
 2011-01-07 Andrew Janke a.janke@gmail.com
-   * Fixed a few minor build issues
-   * made and tagged 1.1.0 release
+	* Fixed a few minor build issues
+	* made and tagged 1.1.0 release
 
 2011-01-06	Jason Lerch jason@phenogenomics.ca
 	* added voldiff to package

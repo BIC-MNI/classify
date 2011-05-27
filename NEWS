@@ -1,3 +1,9 @@
+New in Release 1.1.1
+* Add -nocache to ANN classification
+* Fix memory problem in ann/ann.cc for missing classes
+* Fix string length (from strlen) to add 1 for '\0'
+* Clean up memory after usage in classify.cc
+
 New in Release 1.1.0
 * added voldiff
 * minor build/config changes

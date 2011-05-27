@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: ann.cc,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2002-03-20 22:16:34 $
+$Revision: 1.2 $
+$Author: claude $
+$Date: 2011-05-27 20:47:01 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <assert.h>
@@ -199,9 +199,9 @@ void ann_train_samples(void)
   double   *targetValuePtr = targetValues.contents(); // For efficiency only
 
   int sample = 0;
-  while (sample >= 0) {
+  while (sample >= 0 && sample < num_samples) {
     // Create target values array
-    double *node = targetValuePtr + class_column[sample] - minClass;
+    double *node = targetValuePtr + classToNodeMap[class_column[sample] - minClass];
 
     *node = maxTarget;
     sample = BP->train(feature_matrix[sample], targetValuePtr, ann_error_monitor);
