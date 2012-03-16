@@ -1,0 +1,1 @@
+ADD_LIBRARY(hcm hcm.h hcm.cc)
