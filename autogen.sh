@@ -3,7 +3,7 @@
 set -e
 
 # add libtool stuff
-libtoolize --force --copy
+libtoolize --automake
 
 # normal automake/conf bits
 aclocal -I m4
