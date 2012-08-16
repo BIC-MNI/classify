@@ -994,23 +994,23 @@ void create_feature_matrix_from_tagfile(void)
 
       for_less( j, 0, num_features) {
 
-	GET_VALUE_3D(value, in_volume[j], ROUND(v1), ROUND(v2), ROUND(v3));
-	feature_matrix[num_adj_samples][j] = value;
+        GET_VALUE_3D(value, in_volume[j], ROUND(v1), ROUND(v2), ROUND(v3));
+        feature_matrix[num_adj_samples][j] = value;
       }
 
       /* convert the label into integer */
       class_column[num_adj_samples] = atoi( labels[i] );
 
       if ( debug > 5 ) {
-	fprintf(stdout, "tag %d (%.1f %.1f %.1f) : ", i, v1, v2, v3); 
-	for_less ( j, 0, num_features ) 
-	  fprintf(stdout, "%f, ", feature_matrix[num_adj_samples][j]); 
-	fprintf(stdout, "-> %d.\n", class_column[num_adj_samples]);
+        fprintf(stdout, "tag %d (%.1f %.1f %.1f) : ", i, v1, v2, v3); 
+        for_less ( j, 0, num_features ) 
+          fprintf(stdout, "%f, ", feature_matrix[num_adj_samples][j]); 
+        fprintf(stdout, "-> %d.\n", class_column[num_adj_samples]);
       }
 
       /* keep track of highest class label to set voxel and image max */
       if ( max_class_index <  class_column[num_adj_samples] )
-	max_class_index = class_column[num_adj_samples] ;
+        max_class_index = class_column[num_adj_samples] ;
 	
       num_adj_samples++;  /* adjust new sample size */
 
@@ -1032,7 +1032,7 @@ void create_feature_matrix_from_tagfile(void)
 
 
   /* reserve space for counting classes */
-  ALLOC( class_counter, num_samples ); 
+  ALLOC( class_counter, num_samples+1 ); 
 
   /* initialize class_counter vector */
   for_less( i, 0, num_samples) 
@@ -1047,7 +1047,7 @@ void create_feature_matrix_from_tagfile(void)
       /* dump the feature matrix and class_column here */
       fprintf(stdout, "feature[%d] : ", i); 
       for_less ( j, 0, num_features ) 
-	fprintf(stdout, "%f, ", feature_matrix[i][j]); 
+        fprintf(stdout, "%f, ", feature_matrix[i][j]); 
       fprintf(stdout, "-> %d.\n", class_column[i]);
     }
 

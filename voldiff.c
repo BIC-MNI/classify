@@ -171,13 +171,13 @@ ArgvInfo argTable[] = {
 
   {NULL, ARGV_HELP, NULL, NULL,
      " "},
-  
+
   {"-debug", ARGV_CONSTANT, (char *) TRUE, (char *) &debug,
      "show debugging information."},
 
   {"-stest", ARGV_INT, (char *) NULL, (char *) &stest,
      "test stats on different internal data sets."},
-  
+
   {"-clobber", ARGV_CONSTANT, (char *) TRUE, (char *) &clobber,
      "Overwrite confusion report file."},
 
@@ -186,7 +186,7 @@ ArgvInfo argTable[] = {
 
   {"-view_class_size", ARGV_INT, (char *) NULL, (char *) &view_class_size,
      "Specify the viewing size of the confusion matrix."},      
-  
+
   {"-report", ARGV_STRING, (char *) NULL, (char *) &output_filename,
      "Write statistics to specified file"},      
 
@@ -195,28 +195,28 @@ ArgvInfo argTable[] = {
 
   {"-mask", ARGV_STRING, (char *) NULL, (char *) &mask_filename, 
      "Specify volume which will be used as a mask"},
- 
+
   {"-user_mask_value", ARGV_FLOAT, (char *) NULL, (char *) &user_mask_value,
      "Specify the mask value, in the mask volume to be used"},
-  
+
   {"-world", ARGV_CONSTANT, (char *) TRUE, (char *) &world_coor,
      "Traverse the first volume in world coordinate space."},
-  
+
   {"-outvoxels_die", ARGV_CONSTANT, (char *) TRUE, (char *) &outvoxels_die,
      "If voxels in first volume fall outside the second volume - abort."},
 
   {NULL, ARGV_HELP, NULL, NULL,
      "\nSpecify volume caching options.\n"  },
-  
+
   {"-cached", ARGV_CONSTANT, (char *) TRUE, (char *) &cache_set, 
      "Specify that volume caching be used."},
- 
+
   {"-block_sizes", ARGV_INT, (char *) 3, (char *) &block_sizes,
      "Set the size of the cache block for the volumes."},
 
   {NULL, ARGV_END, NULL, NULL, NULL}
 };
-  
+
 
 
 /* Main program starts here */
