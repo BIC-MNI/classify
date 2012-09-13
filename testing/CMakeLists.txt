@@ -29,7 +29,7 @@ ENDMACRO(ADD_CUSTOM_PERL_TEST)
 
 
 ADD_CUSTOM_PERL_TEST(classify_bayes compare_classify_results.pl ${CMAKE_CURRENT_SOURCE_DIR}/bar.mnc.gz ${CMAKE_CURRENT_SOURCE_DIR}/bar_cls_bayes.mnc.gz --method bayes)
-ADD_CUSTOM_PERL_TEST(classify_ann compare_classify_results.pl ${CMAKE_CURRENT_SOURCE_DIR}/bar.mnc.gz ${CMAKE_CURRENT_SOURCE_DIR}/bar_cls_ann.mnc.gz --method ann)
+ADD_CUSTOM_PERL_TEST(classify_ann   compare_classify_results.pl ${CMAKE_CURRENT_SOURCE_DIR}/bar.mnc.gz ${CMAKE_CURRENT_SOURCE_DIR}/bar_cls_ann.mnc.gz --method ann)
 ADD_CUSTOM_PERL_TEST(classify_bayes compare_classify_results.pl ${CMAKE_CURRENT_SOURCE_DIR}/bar.mnc.gz ${CMAKE_CURRENT_SOURCE_DIR}/bar_cls_min.mnc.gz --method min)
 # knn seem to be broken!
 # ADD_CUSTOM_PERL_TEST(classify_knn compare_classify_results.pl ${CMAKE_CURRENT_SOURCE_DIR}/bar.mnc.gz ${CMAKE_CURRENT_SOURCE_DIR}/bar_cls_knn.mnc.gz --method knn)
