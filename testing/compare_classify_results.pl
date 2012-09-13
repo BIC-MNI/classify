@@ -28,6 +28,7 @@ my $fake=0;
 my $mask;
 my $me = basename ($0);
 my $method='ann';
+my $priors;
 my $tag_file= dirname($0)."/tags.tag";
 
 GetOptions(
@@ -35,12 +36,14 @@ GetOptions(
       'clobber'           => \$clobber,
       'method=s'          => \$method,
       'tags=s'            => \$tag_file,
+      'priors=s'          => \$priors
      );
 
 my $Help = <<HELP;
   Usage: $me <input.mnc> <reference.mnc> 
     --verbose be verbose
     --method <ann,knn,min,bayes>
+    --priors a,b,c
   Problems or comments should be sent to: vladimir.fonov\@gmail.com
 HELP
 
@@ -52,7 +55,11 @@ my $tol=0.00001;#every voxel counts
 
 my $tmpdir = &tempdir( "$me-XXXXXXXX", TMPDIR => 1, CLEANUP => 1 );
 
-my @args=("classify", $in, "$tmpdir/cls_$method.mnc",'-tagfile',$tag_file,'-'.$method);
+my @args=("classify", '-tagfile',$tag_file,'-'.$method,'-nocache');
+
+push @args,"-apriori", "-volume",$priors if $priors;
+
+push @args,$in, "$tmpdir/cls_$method.mnc";
 
 do_cmd(@args);
 

@@ -430,7 +430,7 @@ void bayesian_classify_sample(int *class_num, double *class_prob,
     if (apriori) { /* modify probability using spatial priors */
 
       /* fuzzy_bayes_vector[i] *= apriori_vector[i]; */
-      fuzzy_bayes_vector[i] *= apriori_vector[mean_feature_class_vector[i]]; 
+      fuzzy_bayes_vector[i] *= apriori_vector[mean_feature_class_vector[i] - 1]; //change from Daniel
     }
 
     sum += fuzzy_bayes_vector[i];
