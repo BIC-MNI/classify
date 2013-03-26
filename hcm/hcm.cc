@@ -59,12 +59,12 @@ extern "C" {
 void hcm_count_classes(void);
 
 /* locally defined global variables */
-static Real   **mean_feature_matrix;     /* matrix to reflect mean features */
+static VIO_Real   **mean_feature_matrix;     /* matrix to reflect mean features */
 static int    *mean_feature_class_vector;/* vector to reflect mean feature classes */
-static Real   *delta_vector;             /* eucledian vector of each sample */
-Real   *fuzzy_hcm_vector;               /* fuzzy vector of each sample */
+static VIO_Real   *delta_vector;             /* eucledian vector of each sample */
+VIO_Real   *fuzzy_hcm_vector;               /* fuzzy vector of each sample */
 int    v1, v2, v3;                      /* voxel pointers in x, y, and z direction */
-static Real   m;                        /* proxemity neighbourhood index */
+static VIO_Real   m;                        /* proxemity neighbourhood index */
 
 /* ----------------------------- MNI Header -----------------------------------
 @NAME       : hcm_init_training
@@ -97,7 +97,7 @@ void hcm_init_training(char *param_filename)
     ALLOC( fuzzy_hcm_vector, num_classes );
 
     /* reserve area for the mean feature matrix */
-    ALLOC2D(mean_feature_matrix, num_classes, num_features);
+    VIO_ALLOC2D(mean_feature_matrix, num_classes, num_features);
 
     /* reserve area for the mean_feature_class_vector */
     ALLOC(mean_feature_class_vector, num_classes);
@@ -173,7 +173,7 @@ void hcm_train_samples(void)
   
   int      i, j, k;              /* counters - samples, features, classes */  
   char     name_of_class[4];     /* temp space of char representation of 0-255 */
-  Real     training_class;       /* traing voxel class */
+  VIO_Real     training_class;       /* traing voxel class */
   
 
   if (verbose)
@@ -256,7 +256,7 @@ void hcm_train_samples(void)
 
     for_less( j, 0, num_features) 
       if (class_count[i] != 0)
-	mean_feature_matrix[i][j] /=  (Real) class_count[i];
+	mean_feature_matrix[i][j] /=  (VIO_Real) class_count[i];
 
     /* set the class names - itoa the class number from mean_fcv */
     sprintf( name_of_class, "%d", mean_feature_class_vector[i]);
@@ -309,7 +309,7 @@ void hcm_load_training(char *load_train_filename)
 {
 
   int i, j, k;
-  Real feature_value;
+  VIO_Real feature_value;
   FILE *learn_file;
 
 
@@ -340,7 +340,7 @@ void hcm_load_training(char *load_train_filename)
   ALLOC( fuzzy_hcm_vector, num_classes );
 
   /* reserve area for the mean feature matrix */
-  ALLOC2D(mean_feature_matrix, num_classes, num_features);
+  VIO_ALLOC2D(mean_feature_matrix, num_classes, num_features);
 
   /* reserve area for the mean_feature_class_vector */
   ALLOC(mean_feature_class_vector, num_classes);
@@ -406,7 +406,7 @@ void hcm_count_classes(void)
 {
   
   int      i, j = 0;       /* counter - classes */  
-  Real     voxel_class;    /* class of voxel in training volume */
+  VIO_Real     voxel_class;    /* class of voxel in training volume */
   int      bin_size = 5;   /* var to hold number of bins */
   long     *count_bin;     /* 1D array to hold the number of voxels / class */
 
@@ -510,8 +510,8 @@ void hcm_classify_sample(int *class_num, double *class_prob, int *class_labels)
 {
 
   int           i, j, k;                       /* counters */
-  Real          temp;                          /* temporary variable */
-  Real          minimum;                       /* minimum distance class buffer */
+  VIO_Real          temp;                          /* temporary variable */
+  VIO_Real          minimum;                       /* minimum distance class buffer */
   int           class_index;
 
 

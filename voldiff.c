@@ -110,11 +110,11 @@ void calculate_overall_measures(void);
 void write_report(int volume_index);
 void load_mask_volume(char *mask_file);
 int voxel_is_in_volume( int index, Real vox1, Real vox2, Real vox3);
-void  create_voxel_to_voxel_transform(Volume volume1, Volume volume2,
-				      General_transform  *v1_to_v2 );
+void  create_voxel_to_voxel_transform(VIO_Volume volume1, VIO_Volume volume2,
+				      VIO_General_transform  *v1_to_v2 );
 
 /* Global variables */  
-Status     status;            /* status of loading and saving */
+VIO_Status     status;            /* status of loading and saving */
 
 char       *pname;            /* the name of the invoked program */
 int        verbose = FALSE;   /* inform user as things are processed */
@@ -124,8 +124,8 @@ int        exclude_class = 0; /* exclude class (X) in total hit and miss ratios 
 int        debug = FALSE;     /* print debugging information */
 int        stest = 0;         /* test stats on internal data */
 
-Volume     *in_volume;              /* pointer to array of volumes */
-Volume     mask_volume;             /* volume data to store the mask */
+VIO_Volume     *in_volume;              /* pointer to array of volumes */
+VIO_Volume     mask_volume;             /* volume data to store the mask */
 
 int        **in_volume_sizes;       /* 2D array to hold sizes */
 int        num_volumes;            /* the number of volumes to compare */
@@ -384,18 +384,18 @@ void parse_arguments(int argc, char *argv[])
     }
 
     /* allocate area for filenames and derivatives */
-    ALLOC2D( in_volume_sizes, num_volumes, MAX_DIMENSIONS); 
+    VIO_ALLOC2D( in_volume_sizes, num_volumes, VIO_MAX_DIMENSIONS); 
     ALLOC( in_volume, num_volumes);
 
   } /* if (test) */
    
   /* allocate area for confusion matrix */
-  ALLOC2D( c_matrix, c_matrix_size+1, c_matrix_size+1); /* 1 extra for totals */
+  VIO_ALLOC2D( c_matrix, c_matrix_size+1, c_matrix_size+1); /* 1 extra for totals */
   
   /* confusion table has  STATNUM cols to report the following statistics, 
      kappa, azsm(Alex's), sensit., specif., accur. error, pclass_kappa */
   
-  ALLOC2D( c_table, c_matrix_size, STATNUM); 
+  VIO_ALLOC2D( c_table, c_matrix_size, STATNUM); 
   
 
   /* to refer to class totals in the confusion matrix, it is more informative to
@@ -451,17 +451,17 @@ void load_input_volume(int volume_index)
   if ( !world_coor ) {
 
     if (in_volume_sizes[volume_index][X] != in_volume_sizes[0][X]) {
-      (void) fprintf(stderr,"Error - Volume size mismatch in X dimension\n");
+      (void) fprintf(stderr,"Error - VIO_Volume size mismatch in X dimension\n");
       exit(EXIT_FAILURE);
     }
     
     if (in_volume_sizes[volume_index][Y] != in_volume_sizes[0][Y]) {
-      (void) fprintf(stderr,"Error - Volume size mismatch in Y dimension\n");
+      (void) fprintf(stderr,"Error - VIO_Volume size mismatch in Y dimension\n");
       exit(EXIT_FAILURE);
     }
     
     if (in_volume_sizes[volume_index][Z] != in_volume_sizes[0][Z]) {
-      (void) fprintf(stderr,"Error - Volume size mismatch in Z dimension\n");
+      (void) fprintf(stderr,"Error - VIO_Volume size mismatch in Z dimension\n");
       exit(EXIT_FAILURE);
     }
 
@@ -607,7 +607,7 @@ void produce_confusion_matrix(int volume_index)
 	if (image_value1 >= c_matrix_size) {
 	  fprintf(stderr, "%s may not be a classified volume\n", input_filename[0]); 
 	  fprintf(stderr, "Label value = %d, increase c_matrix_size\n",
-		           (int)ROUND(image_value1) );
+		           (int)VIO_ROUND(image_value1) );
 	  exit(EXIT_FAILURE);
 	}
 
@@ -615,12 +615,12 @@ void produce_confusion_matrix(int volume_index)
 	  fprintf(stderr, "%s may not be a classified volume\n", 
        		           input_filename[volume_index]); 
 	  fprintf(stderr, "Label value = %d, increase c_matrix_size\n",
-		           (int)ROUND(image_value2) );
+		           (int)VIO_ROUND(image_value2) );
 
 	  exit(EXIT_FAILURE);
 	}
 		
-	c_matrix[ROUND(image_value1)][ROUND(image_value2)]++;
+	c_matrix[VIO_ROUND(image_value1)][VIO_ROUND(image_value2)]++;
 	
         NEXT_VOXEL: ;
       }
@@ -668,7 +668,7 @@ void produce_confusion_matrix_in_world_coor(int volume_index)
   Real       image_value1, image_value2;    /* values to be compared */
   Real       wx, wy, wz;                    /* world coordinates  */
   Real       invol_v1, invol_v2, invol_v3;  /* voxel coordinates of in_volume[idx] */
-  General_transform trans;                  /* trans from vol1 voxel to vol2 voxel */
+  VIO_General_transform trans;                  /* trans from vol1 voxel to vol2 voxel */
 
   /* in the next two loops, and then in subsequent ones in this programm, 
      for_less (r, 0, c_matrix_size ) === for ( r = 0; r < c_matrix_size; r++)
@@ -732,9 +732,9 @@ void produce_confusion_matrix_in_world_coor(int volume_index)
 	if ( voxel_is_in_volume( volume_index, invol_v1, invol_v2, invol_v3) ) {
 
 	  image_value2 = get_volume_real_value(in_volume[volume_index], 
-					       ROUND(invol_v1), 
-					       ROUND(invol_v2), 
-					       ROUND(invol_v3), 
+					       VIO_ROUND(invol_v1), 
+					       VIO_ROUND(invol_v2), 
+					       VIO_ROUND(invol_v3), 
 					       0, 0);
           
 	}
@@ -754,7 +754,7 @@ void produce_confusion_matrix_in_world_coor(int volume_index)
 	if (image_value1 >= c_matrix_size) {
 	  fprintf(stderr, "%s may not be a classified volume\n", input_filename[0]); 
 	  fprintf(stderr, "Label value = %d, increase c_matrix_size\n",
-		           (int)ROUND(image_value1) );
+		           (int)VIO_ROUND(image_value1) );
 	  exit(EXIT_FAILURE);
 	}
 
@@ -762,12 +762,12 @@ void produce_confusion_matrix_in_world_coor(int volume_index)
 	  fprintf(stderr, "%s may not be a classified volume\n", 
        		           input_filename[volume_index]); 
 	  fprintf(stderr, "Label value = %d, increase c_matrix_size\n",
-		           (int)ROUND(image_value2) );
+		           (int)VIO_ROUND(image_value2) );
 
 	  exit(EXIT_FAILURE);
 	}
 		
-	c_matrix[ROUND(image_value1)][ROUND(image_value2)]++;
+	c_matrix[VIO_ROUND(image_value1)][VIO_ROUND(image_value2)]++;
 	
         NEXT_VOXEL: ;
       }
@@ -1545,23 +1545,23 @@ void load_mask_volume(char *mask_file)
     exit(EXIT_FAILURE);
     
   /* reserve memory for masked volume sizes */
-  ALLOC( mask_volume_sizes, MAX_DIMENSIONS );  
+  ALLOC( mask_volume_sizes, VIO_MAX_DIMENSIONS );  
 
   /* get the mask volume sizes */
   get_volume_sizes(mask_volume, mask_volume_sizes);
     
   if (in_volume_sizes[0][X] != mask_volume_sizes[X]) {
-    (void) fprintf(stderr,"Error - Mask Volume size mismatch in X dimension\n");
+    (void) fprintf(stderr,"Error - Mask VIO_Volume size mismatch in X dimension\n");
     exit(EXIT_FAILURE);
   }
 
   if (in_volume_sizes[0][Y] != mask_volume_sizes[Y]) {
-    (void) fprintf(stderr,"Error - Mask Volume size mismatch in Y dimension\n");
+    (void) fprintf(stderr,"Error - Mask VIO_Volume size mismatch in Y dimension\n");
     exit(EXIT_FAILURE);
   }
          
   if (in_volume_sizes[0][Z] != mask_volume_sizes[Z]) {
-    (void) fprintf(stderr,"Error - Mask Volume size mismatch in Z dimension\n");
+    (void) fprintf(stderr,"Error - Mask VIO_Volume size mismatch in Z dimension\n");
     exit(EXIT_FAILURE);
   }
  
@@ -1616,10 +1616,10 @@ int voxel_is_in_volume( int index, Real vox1, Real vox2, Real vox3)
 @CREATED    : Mar 16, 1996 ( David MACDONALD )
 @MODIFIED   : 
 ---------------------------------------------------------------------------- */
-void  create_voxel_to_voxel_transform(Volume volume1, Volume volume2,
-				      General_transform  *v1_to_v2 )
+void  create_voxel_to_voxel_transform(VIO_Volume volume1, VIO_Volume volume2,
+				      VIO_General_transform  *v1_to_v2 )
 {
-    General_transform  *v1_to_world, *v2_to_world, world_to_v2;
+    VIO_General_transform  *v1_to_world, *v2_to_world, world_to_v2;
 
     v1_to_world = get_voxel_to_world_transform( volume1 );
     v2_to_world = get_voxel_to_world_transform( volume2 );

@@ -57,7 +57,7 @@
 #include <time_stamp.h>
 
 #ifndef lint
-static char rcsid[]="$Header: /private-cvsroot/INSECT/classify/time_stamp.c,v 1.1 2002-03-20 22:16:34 jason Exp $";
+static char rcsid[]="$Header: /static-cvsroot/INSECT/classify/time_stamp.c,v 1.1 2002-03-20 22:16:34 jason Exp $";
 #endif
 
 /* ----------------------------- MNI Header -----------------------------------

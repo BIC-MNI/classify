@@ -18,13 +18,13 @@ $Date: 2002-03-20 22:16:34 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* externally defined global variables */
-extern Real     **feature_matrix; 
+extern VIO_Real     **feature_matrix;
 extern int      *class_column;
 extern char     **class_name;
 extern int      *class_count;
 
-extern Real     *feature_vector;
-extern Real     *apriori_vector;
+extern VIO_Real     *feature_vector;
+extern VIO_Real     *apriori_vector;
 extern int      num_features;
 extern int      num_classes;
 extern int      num_samples;

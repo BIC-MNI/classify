@@ -51,22 +51,22 @@ extern "C" {
 
 
 void bayesian_allocate_memory(void);
-Real matrix_determinant(int dimension, Real **matrix);
-void scale_matrices(Real ***matrix, Real scale);
+VIO_Real matrix_determinant(int dimension, VIO_Real **matrix);
+void scale_matrices(VIO_Real ***matrix, VIO_Real scale);
 
 
 /* locally defined global variables */
-static Real   **mean_feature_matrix;   /* matrix to reflect mean features */
-static Real   ***covariance_matrix;    /* covariance matrices for each class */
-static Real   ***inv_covariance_matrix;   /* inverse of covariance matrices 
+static VIO_Real   **mean_feature_matrix;   /* matrix to reflect mean features */
+static VIO_Real   ***covariance_matrix;    /* covariance matrices for each class */
+static VIO_Real   ***inv_covariance_matrix;   /* inverse of covariance matrices 
                                       for each class */
 static int    *mean_feature_class_vector; 
                                 /* vector to reflect mean feature classes */
-static Real   *normalize_class_vector;    
+static VIO_Real   *normalize_class_vector;    
                                /* normalization factor for each class */
-static Real   **distance_vector;          /* temporary storage for x - u */
-static Real   *fuzzy_bayes_vector;
-static Real   stdev_scale_factor;
+static VIO_Real   **distance_vector;          /* temporary storage for x - u */
+static VIO_Real   *fuzzy_bayes_vector;
+static VIO_Real   stdev_scale_factor;
 
 /* ----------------------------- MNI Header -----------------------------------
 @NAME       : bayesian_init_training
@@ -148,7 +148,7 @@ void bayesian_init_training(char *param_filename /* parameter is ignored */)
 void bayesian_allocate_memory(void)
 {
   /* reserve area for the mean feature matrix */
-    ALLOC2D(mean_feature_matrix, num_classes, num_features);
+    VIO_ALLOC2D(mean_feature_matrix, num_classes, num_features);
 
     /* reserve area for the mean_feature_class_vector */
     ALLOC(mean_feature_class_vector, num_classes);
@@ -160,11 +160,11 @@ void bayesian_allocate_memory(void)
     ALLOC( fuzzy_bayes_vector, num_classes );
 
     /* reserve area for the covariance matrices */
-    ALLOC3D(covariance_matrix, num_classes, num_features, num_features);
-    ALLOC3D(inv_covariance_matrix, num_classes, num_features, num_features);
+    VIO_ALLOC3D(covariance_matrix, num_classes, num_features, num_features);
+    VIO_ALLOC3D(inv_covariance_matrix, num_classes, num_features, num_features);
     
     /* reserve working space for distance vectors */
-    ALLOC2D(distance_vector, num_classes, num_features);
+    VIO_ALLOC2D(distance_vector, num_classes, num_features);
 
 }
 
@@ -242,7 +242,7 @@ void bayesian_train_samples(void)
   for_less( i, 0, num_classes) 
     for_less( j, 0, num_features) 
       if (class_count[i] != 0)
-	mean_feature_matrix[i][j] /=  (Real) class_count[i];
+	mean_feature_matrix[i][j] /=  (VIO_Real) class_count[i];
 
   if (debug > 2 ) {
 
@@ -292,7 +292,7 @@ void bayesian_train_samples(void)
   for_less( l, 0, num_classes )  
     for_less( j, 0, num_features )  
       for_less( k, 0, num_features ) 
-        covariance_matrix[l][j][k] /= ((Real) class_count[l] - 1);
+        covariance_matrix[l][j][k] /= ((VIO_Real) class_count[l] - 1);
 
   if (debug > 2 ) {
 
@@ -362,7 +362,7 @@ void bayesian_train_samples(void)
 @CREATED    : August 21, 1996 (John Sled)
 @MODIFIED   : 
 ---------------------------------------------------------------------------- */
-void scale_matrices(Real ***matrix, Real scale)
+void scale_matrices(VIO_Real ***matrix, VIO_Real scale)
 {
   int i, j, k;
 
@@ -399,7 +399,7 @@ void bayesian_classify_sample(int *class_num, double *class_prob,
 {
 
   int           i, j, k;               /* counters */
-  Real          exponent, sum, max_prob;
+  VIO_Real          exponent, sum, max_prob;
   int           class_index;
 
   /* calculate distance vectors */
@@ -478,7 +478,7 @@ void bayesian_classify_sample(int *class_num, double *class_prob,
 void bayesian_load_training(char *load_train_filename)
 {
   int i, j, k;
-  Real feature_value;
+  VIO_Real feature_value;
 
   FILE *learn_file;
 
@@ -660,15 +660,15 @@ void bayesian_save_training(char *save_train_filename)
 @CREATED    : August 21, 1996 (John Sled)
 @MODIFIED   : 
 ---------------------------------------------------------------------------- */
-Real matrix_determinant(int dimension, Real **matrix)
+VIO_Real matrix_determinant(int dimension, VIO_Real **matrix)
 {
-  Real determinant = 0;
+  VIO_Real determinant = 0;
   unsigned col;
   int factor, i, j;
-  Real **sub_matrix;
+  VIO_Real **sub_matrix;
 
   if (dimension > 1) {
-    ALLOC2D(sub_matrix, dimension-1, dimension-1);
+    VIO_ALLOC2D(sub_matrix, dimension-1, dimension-1);
     for(col = 0, factor = 1; col < dimension; col++, factor *= -1) {
       /* create minor */
       for_less(i, 1, dimension) {
@@ -681,7 +681,7 @@ Real matrix_determinant(int dimension, Real **matrix)
       determinant += matrix[0][col] * 
         matrix_determinant(dimension-1, sub_matrix) * factor;
     }
-    FREE2D(sub_matrix);
+    VIO_FREE2D(sub_matrix);
   }
   else 
     determinant = matrix[0][0];

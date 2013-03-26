@@ -57,12 +57,12 @@ extern "C" {
 void fcm_count_classes_and_set_names(void);
 
 /* locally defined global variables */
-static Real   **mean_feature_matrix;  /* matrix to reflect mean features */
+static VIO_Real   **mean_feature_matrix;  /* matrix to reflect mean features */
 static int    *mean_feature_class_vector;/* vector to reflect mean feature classes */
-static Real   *euclidian_vector;         /* eucledian vector of each sample */
-Real   *fuzzy_fcm_vector;               /* fuzzy vector of each sample */
+static VIO_Real   *euclidian_vector;         /* eucledian vector of each sample */
+VIO_Real   *fuzzy_fcm_vector;               /* fuzzy vector of each sample */
 static int    v1, v2, v3;               /* voxel pointers in x, y, and z direction */
-static Real   m;                        /* proxemity neighbourhood index */
+static VIO_Real   m;                        /* proxemity neighbourhood index */
 
 /* ----------------------------- MNI Header -----------------------------------
 @NAME       : fcm_init_training
@@ -95,7 +95,7 @@ void fcm_init_training(char *param_filename)
     ALLOC( fuzzy_fcm_vector, num_classes );
 
     /* reserve area for the mean feature matrix */
-    ALLOC2D(mean_feature_matrix, num_classes, num_features);
+    VIO_ALLOC2D(mean_feature_matrix, num_classes, num_features);
 
     /* reserve area for the mean_feature_class_vector */
     ALLOC(mean_feature_class_vector, num_classes);
@@ -168,7 +168,7 @@ void fcm_train_samples(void)
   
   int      i, j;              /* counters - samples, features, classes */  
 
-  Real     u_ik, u_ikm, sig_u_ikm;
+  VIO_Real     u_ik, u_ikm, sig_u_ikm;
 
 
   /* initialize mean feature matrix, feature class vector & num of class samples */
@@ -274,7 +274,7 @@ void fcm_load_training(char *load_train_filename)
 {
 
   int i, j, k;
-  Real feature_value;
+  VIO_Real feature_value;
   FILE *learn_file;
 
 
@@ -305,7 +305,7 @@ void fcm_load_training(char *load_train_filename)
   ALLOC( fuzzy_fcm_vector, num_classes );
 
   /* reserve area for the mean feature matrix */
-  ALLOC2D(mean_feature_matrix, num_classes, num_features);
+  VIO_ALLOC2D(mean_feature_matrix, num_classes, num_features);
 
   /* reserve area for the mean_feature_class_vector */
   ALLOC(mean_feature_class_vector, num_classes);
@@ -382,7 +382,7 @@ void fcm_count_classes_and_set_names(void)
 
   else {
 
-    ALLOC2D(class_name, num_train_vols, 10 );
+    VIO_ALLOC2D(class_name, num_train_vols, 10 );
 
     if ( debug > 4 )
       fprintf( stdout, "classname buffer = %s\n", classname_buffer);
@@ -454,8 +454,8 @@ void fcm_classify_sample(int *class_num, double *class_prob, int *class_labels)
 {
 
   int           i, j;                  /* counters */
-  Real          temp;                  /* temporary variable */
-  Real          max_prob = 0.0;
+  VIO_Real          temp;                  /* temporary variable */
+  VIO_Real          max_prob = 0.0;
 
   /* initialize delta vector */
   for_less ( i, 0, num_classes ) 

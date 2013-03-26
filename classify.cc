@@ -667,7 +667,7 @@ void allocate_memory(void)
   ALLOC(feature_vector, num_features);  
 
   /* allocate memory for first volume sizes */
-  ALLOC(first_volume_sizes, MAX_DIMENSIONS); 
+  ALLOC(first_volume_sizes, VIO_MAX_DIMENSIONS); 
 
   /* allocate memory for volume pointers */
   ALLOC( in_volume, num_features); 
@@ -962,7 +962,7 @@ void create_feature_matrix_from_tagfile(void)
     (void) fprintf(stdout, "Creating feature matrix from tagfile\n");
 
   /* allocate memory for feature matrix space, as big as your samples size */
-  ALLOC2D( feature_matrix, num_samples, num_features); 
+  VIO_ALLOC2D( feature_matrix, num_samples, num_features); 
 
   /* allocate momory for the class column, also as big as your samples size*/
   ALLOC( class_column, num_samples );
@@ -994,7 +994,7 @@ void create_feature_matrix_from_tagfile(void)
 
       for_less( j, 0, num_features) {
 
-        GET_VALUE_3D(value, in_volume[j], ROUND(v1), ROUND(v2), ROUND(v3));
+        GET_VALUE_3D(value, in_volume[j], VIO_ROUND(v1), VIO_ROUND(v2), VIO_ROUND(v3));
         feature_matrix[num_adj_samples][j] = value;
       }
 
@@ -1311,7 +1311,7 @@ void decide_fuzzy_volumes(void){
   /* reserve memory for the fuzzy filename */
   /* the 8 accounts for '/' '_' '.' 'm' 'n' 'c' '\0' 'spare' */
 
-  ALLOC2D( fuzzy_filename, num_classes, (  strlen(fuzzy_path)
+  VIO_ALLOC2D( fuzzy_filename, num_classes, (  strlen(fuzzy_path)
 					 + strlen(fuzzy_prefix) 
 					 + strlen(class_name[0]) + 8) );
 
@@ -1434,7 +1434,7 @@ void initialize_fuzzy_volumes(void)
 @OUTPUT     : 
 @RETURNS    : 
 @DESCRIPTION: write out the fuzzy class confidence levels of the classified volume
-              in separate volumes for each class. Volume names are that of
+              in separate volumes for each class. VIO_Volume names are that of
 	      class_name[num_classes].
 @METHOD     : 
 @GLOBALS    : 
@@ -1778,7 +1778,7 @@ void cleanup_memory(void)
 
   if ( supervised && tagfile_filename) {
 
-    FREE2D( feature_matrix );
+    VIO_FREE2D( feature_matrix );
     FREE( class_column );
   }
 
@@ -1831,16 +1831,16 @@ void cleanup_memory(void)
 @CREATED    : Feb 10, 1996 (Vasco KOLLOKIAN)
 @MODIFIED   : 
 ---------------------------------------------------------------------------- */
-int volume_size_is_ok( Volume loaded_volume) 
+int volume_size_is_ok( VIO_Volume loaded_volume) 
 {
 
 
   int    *loaded_volume_sizes;
   int    loaded_volume_num_dims;
-  STRING *loaded_volume_dim_names;
+  VIO_STR *loaded_volume_dim_names;
   
   /* allocate memory for first volume sizes */
-  ALLOC(loaded_volume_sizes, MAX_DIMENSIONS); 
+  ALLOC(loaded_volume_sizes, VIO_MAX_DIMENSIONS); 
 
   /* get dim size, nums, order */
   get_volume_sizes(loaded_volume, loaded_volume_sizes);
@@ -1873,19 +1873,19 @@ int volume_size_is_ok( Volume loaded_volume)
   /* check for volume size mismatches */
   if (loaded_volume_sizes[X] != first_volume_sizes[X]) {
 
-    (void) fprintf(stderr,"Error - Volume size mismatch in X dimension ");
+    (void) fprintf(stderr,"Error - VIO_Volume size mismatch in X dimension ");
     return FALSE;
   }
 
   if (loaded_volume_sizes[Y] != first_volume_sizes[Y]) {
 
-    (void) fprintf(stderr,"Error - Volume size mismatch in Y dimension ");
+    (void) fprintf(stderr,"Error - VIO_Volume size mismatch in Y dimension ");
     return FALSE;
   }
 
   if (loaded_volume_sizes[Z] != first_volume_sizes[Z]) {
 
-    (void) fprintf(stderr,"Error - Volume size mismatch in Z dimension ");
+    (void) fprintf(stderr,"Error - VIO_Volume size mismatch in Z dimension ");
     return FALSE;
   }
 

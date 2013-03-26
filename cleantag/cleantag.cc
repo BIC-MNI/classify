@@ -34,7 +34,7 @@ extern "C" {
 /* function prototypes */
 
 void parse_arguments(int argc, char* argv[]);
-void load_volume(char *, Volume * );
+void load_volume(char *, VIO_Volume * );
 void load_tag_file( char *);
 void scan_and_clean_tags( char *clean_mode );
 void write_tag_file(void);
@@ -43,7 +43,7 @@ int voxel_is_in_volume( Real vox1, Real vox2, Real vox3 );
 
 /* global variables */
 
-Status     status;
+VIO_Status     status;
 int        verbose = FALSE;
 int        clobber = FALSE;
 int        debug = 0;
@@ -61,9 +61,9 @@ char       *clean_mode = NULL;           /* string to denote cleaning mode*/
 char       **fuzzy_label;
 char       **input_filename;
 
-Volume     *in_volume;
+VIO_Volume     *in_volume;
 int        num_volumes;
-Volume     mask_volume;
+VIO_Volume     mask_volume;
 int        *volume_sizes;
 
 Real       **tags;
@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
   /* optimized for tag access */
   load_tag_file(tag_filename);
 
-  ALLOC(volume_sizes, MAX_DIMENSIONS);
+  ALLOC(volume_sizes, VIO_MAX_DIMENSIONS);
 
   if (mask_filename)
     load_volume( mask_filename, &mask_volume );
@@ -327,7 +327,7 @@ void parse_arguments(int argc, char* argv[])
 @CREATED    : Feb. 28, 1995 (Vasco KOLLOKIAN)
 @MODIFIED   : 
 ---------------------------------------------------------------------------- */
-void load_volume(char *in_filename, Volume *volume)
+void load_volume(char *in_filename, VIO_Volume *volume)
 {
   if (verbose)
     printf ("Processing volume %s...", in_filename);
@@ -418,7 +418,7 @@ void scan_and_clean_tags( char *clean_mode )
 
     /* if a mask is specified, check whether the tag point is in the mask */
     if (mask_filename) {
-      mask_value = get_volume_real_value( mask_volume, ROUND(v1), ROUND(v2), ROUND(v3), 0, 0);
+      mask_value = get_volume_real_value( mask_volume, VIO_ROUND(v1), VIO_ROUND(v2), VIO_ROUND(v3), 0, 0);
       
       if ((mask_value < mask_min) || (mask_value > mask_max)) {
 	accept = FALSE;

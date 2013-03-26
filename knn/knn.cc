@@ -68,7 +68,7 @@ extern "C" {
 /* locally define structures */
 struct record_str  {
   int   index;
-  Real  value;
+  VIO_Real  value;
 };
 
 typedef struct record_str record;
@@ -82,8 +82,8 @@ int    knn;                  /* this is the k value of knn classifier */
 record *euclidian_vector;    /* euclidian distance vector between unknown sample
 				and each training sample */
 int    *knn_class_vector;    /* class vector to find majority in knn */
-Real   *knn_tie_vector;      /* class vector to find tie totals */
-static Real   m;             /* proxemity neighbourhood index */
+VIO_Real   *knn_tie_vector;      /* class vector to find tie totals */
+static VIO_Real   m;             /* proxemity neighbourhood index */
 
 
 /* ----------------------------- MNI Header -----------------------------------
@@ -180,7 +180,7 @@ void knn_init_training(char *param_filename)
 void knn_train_samples(void)
 {
   int        i, j;                          /* counters */
-  Real       temp, dist;                    /* temporary variable */
+  VIO_Real       temp, dist;                    /* temporary variable */
 
   /* calculate the euclidian distance between unknown sample and
      the training samples - and square function is not applied
@@ -268,7 +268,7 @@ void knn_classify_sample(int *class_num, double *class_prob, int *class_labels)
 {
   int                i, j, k;
   int                max_votes;           /* counter to keep max votes */
-  Real               minimum;           /* counter to keep min tie total */
+  VIO_Real               minimum;           /* counter to keep min tie total */
   int                tie = FALSE;
 
   
@@ -379,8 +379,8 @@ void knn_classify_sample(int *class_num, double *class_prob, int *class_labels)
 
   if ( class_prob ) {
 
-    Real  sigma_denom = 0.0;     /* dinominator of sig expression */
-    Real  sigma_numer = 0.0;     /* numerator of sig expression */
+    VIO_Real  sigma_denom = 0.0;     /* dinominator of sig expression */
+    VIO_Real  sigma_numer = 0.0;     /* numerator of sig expression */
 
     for_less( i, 0, knn) {
 
@@ -480,7 +480,7 @@ void knn_save_training(char *save_train_filename)
 int  compare_ascending(const void *a, const void *b)
 {
 
-  Real left, right;
+  VIO_Real left, right;
 
   left  = ((record *)a)->value;
   right = ((record *)b)->value;
