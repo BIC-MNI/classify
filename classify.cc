@@ -414,7 +414,7 @@ void parse_arguments(int argc, char *argv[])
 
 
   /* Call ParseArgv */
-  if ( !ParseArgv(&argc, argv, argTable, 0) ) {   /* switches supplied are OK */ 
+  if ( !ParseArgv(&argc, argv, argTable, 0) ) {   /* switches supplied are VIO_OK */ 
 
     if ( ( train_only || dump_features ) && (argc < 2) ) { 
       /* at least one volume has to be specified : output volume is optional
@@ -712,7 +712,7 @@ void load_input_volumes(void)
                           &in_volume[j],
                           (minc_input_options *) NULL ) ;
     
-    if ( status != OK )
+    if ( status != VIO_OK )
       exit(EXIT_FAILURE);
 
     /* if loading the very first volume, get its sizes, number of dims and dim 
@@ -785,7 +785,7 @@ void load_mask_volume(char *mask_file)
 			&mask_volume,
 			(minc_input_options *) NULL ) ;
     
-  if ( status != OK )
+  if ( status != VIO_OK )
     exit(EXIT_FAILURE);
     
 
@@ -815,8 +815,8 @@ void load_mask_volume(char *mask_file)
 -------------------------------------------------------------------------- */
 void create_empty_classified_volume(void)
 {
-  Real minval = (output_range[0] == -MAXDOUBLE) ? 0 : output_range[0];
-  Real maxval = (output_range[1] == -MAXDOUBLE) ? max_class_index : output_range[1];
+  VIO_Real minval = (output_range[0] == -MAXDOUBLE) ? 0 : output_range[0];
+  VIO_Real maxval = (output_range[1] == -MAXDOUBLE) ? max_class_index : output_range[1];
 
   /* create the classification volume here */   
   if (verbose) { 
@@ -867,7 +867,7 @@ void load_tag_file ( char *tag_filename )
 
   /* tag file should be opened here */
   if ( input_tag_file(tag_filename, &n_tag_volumes, &num_samples,
-		      &tags, NULL, NULL, NULL, NULL, &labels ) != OK ) {
+		      &tags, NULL, NULL, NULL, NULL, &labels ) != VIO_OK ) {
 
     printf("Error reading the tag file.\n");
     exit(EXIT_FAILURE);
@@ -914,7 +914,7 @@ void load_train_volumes(char **trainvol_filename)
 			  (minc_input_options *) NULL ) ;
     
 
-    if ( status != OK )
+    if ( status != VIO_OK )
       exit(EXIT_FAILURE);
 
 
@@ -947,11 +947,11 @@ void create_feature_matrix_from_tagfile(void)
 {
 
   int    i, j;              /* counters i, over samples, j over volumes */
-  Real   wx, wy, wz;        /* world x y z coordinates */
-  Real   v1, v2, v3;        /* voxel x y z coordinates */
-  Real   value;             /* voxel value to go into feature matrix */   
+  VIO_Real   wx, wy, wz;        /* world x y z coordinates */
+  VIO_Real   v1, v2, v3;        /* voxel x y z coordinates */
+  VIO_Real   value;             /* voxel value to go into feature matrix */   
   int    num_adj_samples;   /* var to hold the number of adjusted samples */
-  Real   *class_counter;    /* int array to count the number of classes in samples */
+  VIO_Real   *class_counter;    /* int array to count the number of classes in samples */
   
   
   /* set adjusted samples to zero, it will also index into feature_matrix 
@@ -1177,20 +1177,20 @@ void create_feature_matrix_from_tagfile(void)
 @CREATED    : Sep 22, 1995 ( Vasco KOLLOKIAN)
 @MODIFIED   : 
 ---------------------------------------------------------------------------- */
-int voxel_is_in_volume( Real vox1, Real vox2, Real vox3)
+int voxel_is_in_volume( VIO_Real vox1, VIO_Real vox2, VIO_Real vox3)
 {
  
-  if ( vox1 < -0.5 || vox1 >= (Real) first_volume_sizes[0] - 0.5) {
+  if ( vox1 < -0.5 || vox1 >= (VIO_Real) first_volume_sizes[0] - 0.5) {
 
     return FALSE;
   }
   
-  else if ( vox2 < -0.5 || vox2 >= (Real) first_volume_sizes[1] - 0.5) {
+  else if ( vox2 < -0.5 || vox2 >= (VIO_Real) first_volume_sizes[1] - 0.5) {
     
     return FALSE;
   }
   
-  else if ( vox3 < -0.5 || vox3 >= (Real) first_volume_sizes[2] - 0.5) {
+  else if ( vox3 < -0.5 || vox3 >= (VIO_Real) first_volume_sizes[2] - 0.5) {
     
     return FALSE;
   }
@@ -1243,8 +1243,8 @@ void convert_features_to_slice_caching(void)
 ---------------------------------------------------------------------------- */
 void write_classified_volume(void)
 {
-  Real minval = (output_range[0] == -MAXDOUBLE) ? 0 : output_range[0];
-  Real maxval = (output_range[1] == -MAXDOUBLE) ? max_class_index : output_range[1];
+  VIO_Real minval = (output_range[0] == -MAXDOUBLE) ? 0 : output_range[0];
+  VIO_Real maxval = (output_range[1] == -MAXDOUBLE) ? max_class_index : output_range[1];
 
   /* write the classified volume to a file */
   if (verbose) 
@@ -1263,7 +1263,7 @@ void write_classified_volume(void)
   /* now delete the classified volume so that cache is flushed - as per David */
   delete_volume( classified_volume );
 
-  if ( status != OK )
+  if ( status != VIO_OK )
      exit(EXIT_FAILURE);
 } /* write_classified_volume */
 
@@ -1410,7 +1410,7 @@ void initialize_fuzzy_volumes(void)
 
       } /* if ( cache_set ) */
 
-      Real bg = 0.0;    
+      VIO_Real bg = 0.0;    
       for( v1_ptr = 0; v1_ptr < first_volume_sizes[0]; v1_ptr++ ) {
         for( v2_ptr = 0; v2_ptr < first_volume_sizes[1]; v2_ptr++ ) {
           for( v3_ptr = 0; v3_ptr < first_volume_sizes[2]; v3_ptr++ ) {
@@ -1470,7 +1470,7 @@ void write_fuzzy_volumes(void)
       /* now delete the fuzzy volumes so that cache is flushed - as per David */
       delete_volume( fuzzy_volume[i] );
  
-      if ( status != OK )
+      if ( status != VIO_OK )
 	exit(EXIT_FAILURE);
       
     } /* if ( create_fuzzy_volume ) */
@@ -1605,7 +1605,7 @@ void classify_volume(void)
 
   int    j, k;                  /* counters for sample and volume, fuzzy vols */
   int    class_val;             /* class of the classified sample */
-  Real   mask_value;            /* holds value of mask to consider */
+  VIO_Real   mask_value;            /* holds value of mask to consider */
 
 
   /* reserve space for class probabilities and their labels */
@@ -1824,7 +1824,7 @@ void cleanup_memory(void)
 @INPUT      : 
 @OUTPUT     : 
 @RETURNS    : 
-@DESCRIPTION: verifies that volume sizes are OK
+@DESCRIPTION: verifies that volume sizes are VIO_OK
 @METHOD     : 
 @GLOBALS    : 
 @CALLS      : 
@@ -1871,21 +1871,21 @@ int volume_size_is_ok( VIO_Volume loaded_volume)
 
      
   /* check for volume size mismatches */
-  if (loaded_volume_sizes[X] != first_volume_sizes[X]) {
+  if (loaded_volume_sizes[VIO_X] != first_volume_sizes[VIO_X]) {
 
-    (void) fprintf(stderr,"Error - VIO_Volume size mismatch in X dimension ");
+    (void) fprintf(stderr,"Error - Volume size mismatch in X dimension ");
     return FALSE;
   }
 
-  if (loaded_volume_sizes[Y] != first_volume_sizes[Y]) {
+  if (loaded_volume_sizes[VIO_Y] != first_volume_sizes[VIO_Y]) {
 
-    (void) fprintf(stderr,"Error - VIO_Volume size mismatch in Y dimension ");
+    (void) fprintf(stderr,"Error - Volume size mismatch in Y dimension ");
     return FALSE;
   }
 
-  if (loaded_volume_sizes[Z] != first_volume_sizes[Z]) {
+  if (loaded_volume_sizes[VIO_Z] != first_volume_sizes[VIO_Z]) {
 
-    (void) fprintf(stderr,"Error - VIO_Volume size mismatch in Z dimension ");
+    (void) fprintf(stderr,"Error - Volume size mismatch in Z dimension ");
     return FALSE;
   }
 

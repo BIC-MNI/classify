@@ -27,7 +27,7 @@
  * removed -exclude from the options list
  *
  * Revision 1.14  1996/01/24  07:48:57  vasco
- * Fixed a bug in calculating kappa_{numer,denom} by casting into (Real).
+ * Fixed a bug in calculating kappa_{numer,denom} by casting into (VIO_Real).
  *
  * Revision 1.13  1996/01/24  06:46:18  vasco
  * Removed sub_kappa and nozero_kappa, and all exclude related items.
@@ -109,7 +109,7 @@ void calculate_similarity_measures(void);
 void calculate_overall_measures(void);
 void write_report(int volume_index);
 void load_mask_volume(char *mask_file);
-int voxel_is_in_volume( int index, Real vox1, Real vox2, Real vox3);
+int voxel_is_in_volume( int index, VIO_Real vox1, VIO_Real vox2, VIO_Real vox3);
 void  create_voxel_to_voxel_transform(VIO_Volume volume1, VIO_Volume volume2,
 				      VIO_General_transform  *v1_to_v2 );
 
@@ -119,7 +119,7 @@ VIO_Status     status;            /* status of loading and saving */
 char       *pname;            /* the name of the invoked program */
 int        verbose = FALSE;   /* inform user as things are processed */
 int        clobber = FALSE;   /* overwrite existing report file */
-int        exclude_class = 0; /* exclude class (X) in total hit and miss ratios */
+int        exclude_class = 0; /* exclude class (VIO_X) in total hit and miss ratios */
 
 int        debug = FALSE;     /* print debugging information */
 int        stest = 0;         /* test stats on internal data */
@@ -135,7 +135,7 @@ char       *output_filename;        /* confusion report filename */
 
 int        view_class_size=DEFVIEWSIZE;   /* the size of the window to on CM */
 
-Real       total_hit_ratio,
+VIO_Real       total_hit_ratio,
            excluded_total_hit_ratio, /* ratio without class zero */
            excluded_total_miss_ratio,
            total_miss_ratio,        /* total hit and miss ratio */
@@ -150,7 +150,7 @@ int        class_total;        /* more discriptive index for marginals totals */
                                /* this is the same as c_matrix_size, init. later */
 long       **c_matrix;              /* confusion matrix */
 int        r,c;                     /* row and column counters */
-Real       **c_table;               /* confusion table to report hit-miss/ class */ 
+VIO_Real       **c_table;               /* confusion table to report hit-miss/ class */ 
 
 long       total_voxels_per_class, 
            total_hits,
@@ -158,7 +158,7 @@ long       total_voxels_per_class,
 
 FILE       *matrep;                 /* FILE variable of output_filename */
 char       *mask_filename;          /* filename of the mask volume */
-Real       user_mask_value = 0.99;   /* default mask value to consider */
+VIO_Real       user_mask_value = 0.99;   /* default mask value to consider */
 
 int        world_coor = FALSE;         /* flag for world coordinate traversal */
 int        outvoxels_die = FALSE;      /* die if voxels fall outside volume 2 */
@@ -440,7 +440,7 @@ void load_input_volume(int volume_index)
 			&in_volume[volume_index],
 			(minc_input_options *) NULL ) ;
     
-  if ( status != OK )
+  if ( status != VIO_OK )
     exit(EXIT_FAILURE);
     
 
@@ -450,18 +450,18 @@ void load_input_volume(int volume_index)
   /* check to see if volumes are of same size in each dim, if not in world*/
   if ( !world_coor ) {
 
-    if (in_volume_sizes[volume_index][X] != in_volume_sizes[0][X]) {
-      (void) fprintf(stderr,"Error - VIO_Volume size mismatch in X dimension\n");
+    if (in_volume_sizes[volume_index][VIO_X] != in_volume_sizes[0][VIO_X]) {
+      (void) fprintf(stderr,"Error - Volume size mismatch in X dimension\n");
       exit(EXIT_FAILURE);
     }
     
-    if (in_volume_sizes[volume_index][Y] != in_volume_sizes[0][Y]) {
-      (void) fprintf(stderr,"Error - VIO_Volume size mismatch in Y dimension\n");
+    if (in_volume_sizes[volume_index][VIO_Y] != in_volume_sizes[0][VIO_Y]) {
+      (void) fprintf(stderr,"Error - Volume size mismatch in Y dimension\n");
       exit(EXIT_FAILURE);
     }
     
-    if (in_volume_sizes[volume_index][Z] != in_volume_sizes[0][Z]) {
-      (void) fprintf(stderr,"Error - VIO_Volume size mismatch in Z dimension\n");
+    if (in_volume_sizes[volume_index][VIO_Z] != in_volume_sizes[0][VIO_Z]) {
+      (void) fprintf(stderr,"Error - Volume size mismatch in Z dimension\n");
       exit(EXIT_FAILURE);
     }
 
@@ -504,7 +504,7 @@ void load_first_input_volume(void)
 			&in_volume[0],
 			(minc_input_options *) NULL ) ;
     
-  if ( status != OK )
+  if ( status != VIO_OK )
     exit(EXIT_FAILURE);
 
   /* get the volume sizes */
@@ -531,8 +531,8 @@ void produce_confusion_matrix(int volume_index)
 {
    
   int        v1, v2, v3;                    /* voxel indeces */
-  Real       image_value1, image_value2;    /* values to be compared */
-  Real       mask_value;                    /* value of the mask voxel */
+  VIO_Real       image_value1, image_value2;    /* values to be compared */
+  VIO_Real       mask_value;                    /* value of the mask voxel */
 
   /* in the next two loops, and then in subsequent ones in this programm, 
      for_less (r, 0, c_matrix_size ) === for ( r = 0; r < c_matrix_size; r++)
@@ -665,9 +665,9 @@ void produce_confusion_matrix_in_world_coor(int volume_index)
 {
    
   int        v1, v2, v3;                    /* voxel indeces */
-  Real       image_value1, image_value2;    /* values to be compared */
-  Real       wx, wy, wz;                    /* world coordinates  */
-  Real       invol_v1, invol_v2, invol_v3;  /* voxel coordinates of in_volume[idx] */
+  VIO_Real       image_value1, image_value2;    /* values to be compared */
+  VIO_Real       wx, wy, wz;                    /* world coordinates  */
+  VIO_Real       invol_v1, invol_v2, invol_v3;  /* voxel coordinates of in_volume[idx] */
   VIO_General_transform trans;                  /* trans from vol1 voxel to vol2 voxel */
 
   /* in the next two loops, and then in subsequent ones in this programm, 
@@ -709,9 +709,9 @@ void produce_confusion_matrix_in_world_coor(int volume_index)
 	    This is left here just for comparative purposed
 
 	convert_3D_voxel_to_world(in_volume[0], 
-				  (Real)v1,
-				  (Real)v2,
-				  (Real)v3,
+				  (VIO_Real)v1,
+				  (VIO_Real)v2,
+				  (VIO_Real)v3,
 				  &wx,
 				  &wy,
 				  &wz);
@@ -726,7 +726,7 @@ void produce_confusion_matrix_in_world_coor(int volume_index)
       
         */
 
-	general_transform_point( &trans, (Real) v1, (Real) v2, (Real) v3,
+	general_transform_point( &trans, (VIO_Real) v1, (VIO_Real) v2, (VIO_Real) v3,
 				 &invol_v1, &invol_v2, &invol_v3 );
 
 	if ( voxel_is_in_volume( volume_index, invol_v1, invol_v2, invol_v3) ) {
@@ -1126,12 +1126,12 @@ void calculate_similarity_measures(void)
    Also to calculate per class kappa without collapsing the matrix, the following
    formula was obtained from Bishop 1975 (p 397) :
 
-   Ki = ( NXii - Xi+X+i ) / ( NXi+ - Xi+X+i )     kappa for each class i
+   Ki = ( NXii - Xi+VIO_X+i ) / ( NXi+ - Xi+VIO_X+i )     kappa for each class i
    
    where N   = total number of voxels
          Xii = hits per class
          Xi+ = column total (row-wise)
-         X+i = row total (column-wise)
+         VIO_X+i = row total (column-wise)
 
    and   total kappa = Sig ( numerator ) / Sig (denominator )  */
 
@@ -1139,24 +1139,24 @@ void calculate_similarity_measures(void)
 
   long hit_voxels_per_class;
 
-  Real a, b, c, d, Po, Pc, ckappa, azsm;
-  Real sensitivity, specificity, accuracy;
+  VIO_Real a, b, c, d, Po, Pc, ckappa, azsm;
+  VIO_Real sensitivity, specificity, accuracy;
 
-  Real pclass_kappa;        /* per class kappa ala Bishop 1975 */
-  Real kappa_numer = 0.0;   /* used for calculating pclass_kappa */
-  Real kappa_denom = 0.0;
+  VIO_Real pclass_kappa;        /* per class kappa ala Bishop 1975 */
+  VIO_Real kappa_numer = 0.0;   /* used for calculating pclass_kappa */
+  VIO_Real kappa_denom = 0.0;
 
   /* total kappa fraction components */
-  Real sig_kappa_numer = 0.0; /* verification for total kappa */
-  Real sig_kappa_denom = 0.0;
+  VIO_Real sig_kappa_numer = 0.0; /* verification for total kappa */
+  VIO_Real sig_kappa_denom = 0.0;
 
   /* brain kappa fraction components */
-  Real sig_brain_kappa_numer = 0.0; 
-  Real sig_brain_kappa_denom = 0.0;
+  VIO_Real sig_brain_kappa_numer = 0.0; 
+  VIO_Real sig_brain_kappa_denom = 0.0;
 
   /* paren kappa fraction components */
-  Real sig_paren_kappa_numer = 0.0; 
-  Real sig_paren_kappa_denom = 0.0;
+  VIO_Real sig_paren_kappa_numer = 0.0; 
+  VIO_Real sig_paren_kappa_denom = 0.0;
 
   total_hits   = 0;
 
@@ -1174,10 +1174,10 @@ void calculate_similarity_measures(void)
 
 
     /* get the definitions of a, b, c, and d */
-    a = (Real) c_matrix[class_idx][class_idx];        
-    b = (Real) c_matrix[class_idx][class_total]   - a;
-    c = (Real) c_matrix[class_total][class_idx]   - a;
-    d = (Real) c_matrix[class_total][class_total] - ( a + b + c );
+    a = (VIO_Real) c_matrix[class_idx][class_idx];        
+    b = (VIO_Real) c_matrix[class_idx][class_total]   - a;
+    c = (VIO_Real) c_matrix[class_total][class_idx]   - a;
+    d = (VIO_Real) c_matrix[class_total][class_total] - ( a + b + c );
 
     if (debug) {
 
@@ -1236,21 +1236,21 @@ void calculate_similarity_measures(void)
       specificity = d / ( c + d );
       accuracy    = Po;  /* this is same as Po */
 
-      /* calculate per class kappa, Ki = ( NXii - Xi+X+i ) / ( NXi+ - Xi+X+i ) */
+      /* calculate per class kappa, Ki = ( NXii - Xi+VIO_X+i ) / ( NXi+ - Xi+VIO_X+i ) */
 
 
       kappa_numer = (  
-		       ( (Real) c_matrix[class_total][class_total] * (Real) a ) -
-		       ( (Real) c_matrix[class_idx][class_total] *  
-			 (Real) c_matrix[class_total][class_idx] ) 
+		       ( (VIO_Real) c_matrix[class_total][class_total] * (VIO_Real) a ) -
+		       ( (VIO_Real) c_matrix[class_idx][class_total] *  
+			 (VIO_Real) c_matrix[class_total][class_idx] ) 
 		     ); 
 
 
       kappa_denom =  (  
-		       ( (Real) c_matrix[class_total][class_total] * 
-		         (Real) c_matrix[class_idx][class_total] ) -
-		       ( (Real) c_matrix[class_idx][class_total]  *
-		         (Real) c_matrix[class_total][class_idx] ) 
+		       ( (VIO_Real) c_matrix[class_total][class_total] * 
+		         (VIO_Real) c_matrix[class_idx][class_total] ) -
+		       ( (VIO_Real) c_matrix[class_idx][class_total]  *
+		         (VIO_Real) c_matrix[class_total][class_idx] ) 
 		     );
 
 
@@ -1294,7 +1294,7 @@ void calculate_similarity_measures(void)
 
       /* store results in c_table */
       c_table[class_idx][SENSITIVITY] = sensitivity;
-      c_table[class_idx][ERROR] = 1.0 - (Real) c_table[class_idx][SENSITIVITY];
+      c_table[class_idx][ERROR] = 1.0 - (VIO_Real) c_table[class_idx][SENSITIVITY];
       c_table[class_idx][SPECIFICITY] = specificity;
       c_table[class_idx][ACCURACY] = accuracy;
       c_table[class_idx][PCLASS_KAPPA] = pclass_kappa;
@@ -1304,8 +1304,8 @@ void calculate_similarity_measures(void)
   } /* for_less */    
     
   /* give an overall performance measure */
-  total_hit_ratio  =  (Real) total_hits / 
-                      (Real) c_matrix[class_total][class_total];
+  total_hit_ratio  =  (VIO_Real) total_hits / 
+                      (VIO_Real) c_matrix[class_total][class_total];
                       
   total_miss_ratio =  1.0 - total_hit_ratio;
 
@@ -1339,27 +1339,27 @@ void  calculate_overall_measures(void)
 
   int class_idx;  
 
-  Real Po = 0.0;
-  Real Pc = 0.0;
-  Real azsm_numerator = 0.0;           /* terms to denote num and denom of azsm */
-  Real azsm_dinominator = 0.0;
-  Real A, B, C, D;                   /* to calculate 2a+b+c, different than alex */
+  VIO_Real Po = 0.0;
+  VIO_Real Pc = 0.0;
+  VIO_Real azsm_numerator = 0.0;           /* terms to denote num and denom of azsm */
+  VIO_Real azsm_dinominator = 0.0;
+  VIO_Real A, B, C, D;                   /* to calculate 2a+b+c, different than alex */
   int  i,j;                            /* counters */
 
 
   /* start calculating overall kappa here */
 
   /* this following is the same as total_hit_ratio */
-  Po = (Real) total_hits / (Real) c_matrix[class_total][class_total] ;
+  Po = (VIO_Real) total_hits / (VIO_Real) c_matrix[class_total][class_total] ;
 
   for_less ( class_idx, 0, c_matrix_size ) {
 
-    Pc += ( (Real) c_matrix[class_idx][class_total]   *  /* col_total */
-	    (Real) c_matrix[class_total][class_idx]   /  /* row_total */
-	    (Real) c_matrix[class_total][class_total] ); /* N */
+    Pc += ( (VIO_Real) c_matrix[class_idx][class_total]   *  /* col_total */
+	    (VIO_Real) c_matrix[class_total][class_idx]   /  /* row_total */
+	    (VIO_Real) c_matrix[class_total][class_total] ); /* N */
   }
 
-  Pc = Pc /  (Real) c_matrix[class_total][class_total] ;  /* final division by N */
+  Pc = Pc /  (VIO_Real) c_matrix[class_total][class_total] ;  /* final division by N */
 
   if ( debug ) {
 
@@ -1541,7 +1541,7 @@ void load_mask_volume(char *mask_file)
 			&mask_volume,
 			(minc_input_options *) NULL ) ;
     
-  if ( status != OK )
+  if ( status != VIO_OK )
     exit(EXIT_FAILURE);
     
   /* reserve memory for masked volume sizes */
@@ -1550,18 +1550,18 @@ void load_mask_volume(char *mask_file)
   /* get the mask volume sizes */
   get_volume_sizes(mask_volume, mask_volume_sizes);
     
-  if (in_volume_sizes[0][X] != mask_volume_sizes[X]) {
-    (void) fprintf(stderr,"Error - Mask VIO_Volume size mismatch in X dimension\n");
+  if (in_volume_sizes[0][VIO_X] != mask_volume_sizes[VIO_X]) {
+    (void) fprintf(stderr,"Error - Mask Volume size mismatch in X dimension\n");
     exit(EXIT_FAILURE);
   }
 
-  if (in_volume_sizes[0][Y] != mask_volume_sizes[Y]) {
-    (void) fprintf(stderr,"Error - Mask VIO_Volume size mismatch in Y dimension\n");
+  if (in_volume_sizes[0][VIO_Y] != mask_volume_sizes[VIO_Y]) {
+    (void) fprintf(stderr,"Error - Mask Volume size mismatch in Y dimension\n");
     exit(EXIT_FAILURE);
   }
          
-  if (in_volume_sizes[0][Z] != mask_volume_sizes[Z]) {
-    (void) fprintf(stderr,"Error - Mask VIO_Volume size mismatch in Z dimension\n");
+  if (in_volume_sizes[0][VIO_Z] != mask_volume_sizes[VIO_Z]) {
+    (void) fprintf(stderr,"Error - Mask Volume size mismatch in Z dimension\n");
     exit(EXIT_FAILURE);
   }
  
@@ -1580,22 +1580,22 @@ void load_mask_volume(char *mask_file)
 @CREATED    : Sep 22, 1995 ( Vasco KOLLOKIAN)
 @MODIFIED   : Mar 16, 1996 ( Vasco KOLLOKIAN)
 ---------------------------------------------------------------------------- */
-int voxel_is_in_volume( int index, Real vox1, Real vox2, Real vox3)
+int voxel_is_in_volume( int index, VIO_Real vox1, VIO_Real vox2, VIO_Real vox3)
 {
  
   /* see if voxel is in specific volume marked by volume index */
 
-  if ( vox1 < -0.5 || vox1 >= (Real) in_volume_sizes[index][0] - 0.5) {
+  if ( vox1 < -0.5 || vox1 >= (VIO_Real) in_volume_sizes[index][0] - 0.5) {
 
     return FALSE;
   }
   
-  else if ( vox2 < -0.5 || vox2 >= (Real) in_volume_sizes[index][1] - 0.5) {
+  else if ( vox2 < -0.5 || vox2 >= (VIO_Real) in_volume_sizes[index][1] - 0.5) {
     
     return FALSE;
   }
   
-  else if ( vox3 < -0.5 || vox3 >= (Real) in_volume_sizes[index][2] - 0.5) {
+  else if ( vox3 < -0.5 || vox3 >= (VIO_Real) in_volume_sizes[index][2] - 0.5) {
     
     return FALSE;
   }

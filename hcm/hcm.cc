@@ -136,7 +136,7 @@ void hcm_init_training(char *param_filename)
     }
     
    /* scan for the neighbourhood proxemity number */
-    fscanf( hcm_par_file, "m=%f\n", &m);
+    fscanf( hcm_par_file, "m=%lf\n", &m);
      
     fclose(hcm_par_file);
 
@@ -150,7 +150,7 @@ void hcm_init_training(char *param_filename)
 
   if ( debug > 2) {
 
-    fprintf(stdout, "m=%f\n", m);      
+    fprintf(stdout, "m=%lf\n", m);      
   }
 
 }
@@ -463,7 +463,7 @@ void hcm_count_classes(void)
   if ( debug >= 3 ) {
 
     for_less( i, 0, bin_size) 
-      fprintf( stdout, "count_bin[%d] = %d\n", i, count_bin[i] );
+      fprintf( stdout, "count_bin[%d] = %ld\n", i, count_bin[i] );
 
   }
 

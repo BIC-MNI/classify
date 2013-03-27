@@ -131,7 +131,7 @@ void fcm_init_training(char *param_filename)
     }
     
    /* scan for the neighbourhood proxemity number */
-    fscanf( fcm_par_file, "m=%f\n", &m);
+    fscanf( fcm_par_file, "m=%lf\n", &m);
      
     fclose(fcm_par_file);
 

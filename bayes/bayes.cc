@@ -115,7 +115,7 @@ void bayesian_init_training(char *param_filename /* parameter is ignored */)
     }
     
    /* scan for standard deviation scale factor */
-    fscanf( param_file, "scale=%f\n", &stdev_scale_factor);
+    fscanf( param_file, "scale=%lf\n", &stdev_scale_factor);
      
     fclose(param_file);
 

@@ -23,7 +23,7 @@ typedef void (*Init_Training)(char *filename);
 typedef void (*Load_Training)(char *filename);
 typedef void (*Save_Training)(char *filename);
 typedef void (*Train)();
-typedef void (*Classify)(int *class_num, Real *class_probs, int *class_labels);
+typedef void (*Classify)(int *class_num, VIO_Real *class_probs, int *class_labels);
 
 /* FUNCTION PROTOTYPES */
 
@@ -42,9 +42,9 @@ void initialize_fuzzy_volumes(void);
 void write_fuzzy_volumes(void);
 void set_classifier_functions( int classifier_index );
 void load_mask_volume(char *mask_file);
-int  voxel_is_in_volume( Real vox1, Real vox2, Real vox3);
+int  voxel_is_in_volume( VIO_Real vox1, VIO_Real vox2, VIO_Real vox3);
 void decide_fuzzy_volumes(void);
 void convert_features_to_slice_caching(void);
 void load_train_volumes(char **tagvolume_filename);
-int  volume_size_is_ok( Volume vol );
+int  volume_size_is_ok( VIO_Volume vol );
 

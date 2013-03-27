@@ -38,7 +38,7 @@ void load_volume(char *, VIO_Volume * );
 void load_tag_file( char *);
 void scan_and_clean_tags( char *clean_mode );
 void write_tag_file(void);
-int voxel_is_in_volume( Real vox1, Real vox2, Real vox3 );
+int voxel_is_in_volume( VIO_Real vox1, VIO_Real vox2, VIO_Real vox3 );
 
 
 /* global variables */
@@ -48,8 +48,8 @@ int        verbose = FALSE;
 int        clobber = FALSE;
 int        debug = 0;
 
-Real       threshold = 0.9;      /* denote fuzzy acceptance level */
-Real       diff_thresh = 0.1;    /* denote fuzzy proximity rejection level */
+VIO_Real       threshold = 0.9;      /* denote fuzzy acceptance level */
+VIO_Real       diff_thresh = 0.1;    /* denote fuzzy proximity rejection level */
 
 char       *tag_filename;                /* original tag filename */
 char       *new_tag_filename;            /* cleaned tag filename */
@@ -66,11 +66,11 @@ int        num_volumes;
 VIO_Volume     mask_volume;
 int        *volume_sizes;
 
-Real       **tags;
+VIO_Real       **tags;
 char       **labels;
 long       tagpoint;
 
-Real       **new_tags;
+VIO_Real       **new_tags;
 char       **new_labels;
 
 int        new_tagpoint = 0;
@@ -337,7 +337,7 @@ void load_volume(char *in_filename, VIO_Volume *volume)
 			 FALSE, 0.0, 0.0,
 			 TRUE, volume, (minc_input_options *) NULL ) ;
   
-  if( status != OK )
+  if( status != VIO_OK )
     exit(EXIT_FAILURE);
   
   if (verbose)
@@ -360,23 +360,23 @@ void load_volume(char *in_filename, VIO_Volume *volume)
 ---------------------------------------------------------------------------- */
 void scan_and_clean_tags( char *clean_mode )
 {
-  Real wx, wy, wz;          /* world coordinates of tag */
-  Real v1, v2, v3;          /* voxel ooordinates of tag */
+  VIO_Real wx, wy, wz;          /* world coordinates of tag */
+  VIO_Real v1, v2, v3;          /* voxel ooordinates of tag */
   int  accept;              /* flag to accept or reject a tag point */
 
   int  hi_idx;                 /* highest index to fuzzy_class */
   int  hi2_idx;                /* second highest index to fuzzy_class */
-  Real *fuzzy_class;           /* array to hold fuzzy values for classes */
-  Real hi_fuzzy;               /* value of highest fuzzy class */
-  Real hi2_fuzzy;              /* value of second highest fuzzy class */
-  Real mask_value;             /* value of mask */
+  VIO_Real *fuzzy_class;           /* array to hold fuzzy values for classes */
+  VIO_Real hi_fuzzy;               /* value of highest fuzzy class */
+  VIO_Real hi2_fuzzy;              /* value of second highest fuzzy class */
+  VIO_Real mask_value;             /* value of mask */
   int  lbl_idx;                /* index to fuzzy_class corresponding to tag label */
 
   int  *reject_count;           /* array to indicate number of rejected tags / class */
   int  *accept_count;           /* array to indicate number of accepted tags / class */
 
-  Real mask_min = mask_binvalue - 0.5;
-  Real mask_max = mask_binvalue + 0.5;
+  VIO_Real mask_min = mask_binvalue - 0.5;
+  VIO_Real mask_max = mask_binvalue + 0.5;
 
   /* reserve some memory for the fuzzy feature vector */
   if (num_volumes) {
@@ -407,9 +407,9 @@ void scan_and_clean_tags( char *clean_mode )
     lbl_idx = 0;
 
     /* get the world coordinate of tag point */
-    wx = tags[tagpoint][X];
-    wy = tags[tagpoint][Y];
-    wz = tags[tagpoint][Z];
+    wx = tags[tagpoint][VIO_X];
+    wy = tags[tagpoint][VIO_Y];
+    wz = tags[tagpoint][VIO_Z];
    
     /* convert tag world to voxel */
     /* use first volume or mask   */
@@ -526,9 +526,9 @@ void scan_and_clean_tags( char *clean_mode )
       SET_ARRAY_SIZE( new_tags, new_tagpoint, new_tagpoint+1, 1000);
       ALLOC( new_tags[new_tagpoint], 3);
 	
-      new_tags[new_tagpoint][X] = wx;
-      new_tags[new_tagpoint][Y] = wy;
-      new_tags[new_tagpoint][Z] = wz;
+      new_tags[new_tagpoint][VIO_X] = wx;
+      new_tags[new_tagpoint][VIO_Y] = wy;
+      new_tags[new_tagpoint][VIO_Z] = wz;
       
       /* copy label */
       SET_ARRAY_SIZE( new_labels, new_tagpoint, new_tagpoint+1, 1000);
@@ -590,7 +590,7 @@ void write_tag_file(void)
     printf("Writing tag file %s ...\n", new_tag_filename);
   
   if (output_tag_file(new_tag_filename, comment, 1, new_tagpoint, new_tags, 
-		      NULL, NULL, NULL, NULL, new_labels) != OK)
+		      NULL, NULL, NULL, NULL, new_labels) != VIO_OK)
     exit(EXIT_FAILURE);
   
 }
@@ -618,7 +618,7 @@ void load_tag_file ( char *tag_filename )
 
   /* read the tag file */
   if ( input_tag_file(tag_filename, &num_vol, &num_oldtags,
-		      &tags, NULL, NULL, NULL, NULL, &labels ) != OK ) {
+		      &tags, NULL, NULL, NULL, NULL, &labels ) != VIO_OK ) {
 
     fprintf(stderr, "Error reading the tag file.\n");
     exit(EXIT_FAILURE);
@@ -640,18 +640,18 @@ void load_tag_file ( char *tag_filename )
 @CREATED    : Sep 22, 1995 ( Vasco KOLLOKIAN)
 @MODIFIED   : Mar 5, 1996 ( Vasco KOLLOKIAN)
 ---------------------------------------------------------------------------- */
-int voxel_is_in_volume( Real vox1, Real vox2, Real vox3 )
+int voxel_is_in_volume( VIO_Real vox1, VIO_Real vox2, VIO_Real vox3 )
 {
  
   /* in_volume[0] is the volume against which the tags are verified */
 
-  if ( vox1 < -0.5 || vox1 >= (Real) volume_sizes[0] - 0.5)
+  if ( vox1 < -0.5 || vox1 >= (VIO_Real) volume_sizes[0] - 0.5)
     return FALSE;
   
-  else if ( vox2 < -0.5 || vox2 >= (Real) volume_sizes[1] - 0.5)
+  else if ( vox2 < -0.5 || vox2 >= (VIO_Real) volume_sizes[1] - 0.5)
     return FALSE;
   
-  else if ( vox3 < -0.5 || vox3 >= (Real) volume_sizes[2] - 0.5)
+  else if ( vox3 < -0.5 || vox3 >= (VIO_Real) volume_sizes[2] - 0.5)
     return FALSE;
 
   else

@@ -43,7 +43,7 @@ Save_Training save_training = 0;
 Train         train = 0;
 Classify      classify = 0;
 
-Status     status;            /* status of loading and saving */
+VIO_Status     status;            /* status of loading and saving */
 int        num_features;      /* number of volumes to be processed */  
 char       *pname;            /* the name of the invoked program */
 char       *history;          /* command line added to volume's history */
@@ -71,8 +71,8 @@ nc_type    fuzzy_type = NC_BYTE;    /* specify type of fuzzy volumes */
 int        sign = FALSE;      /* specify whether it is signed or not */
 
 
-Volume     *in_volume;                /* pointer to array of volumes */
-Volume     *fuzzy_volume;             /* pointer to array of fuzzy volumes */
+VIO_Volume     *in_volume;                /* pointer to array of volumes */
+VIO_Volume     *fuzzy_volume;             /* pointer to array of fuzzy volumes */
 char       **fuzzy_filename;          /* pointer to array of fuzzy volume filenames */
 char       *fuzzy_path = NULL;        /* pointer to array of fuzzy volume path */
 
@@ -80,7 +80,7 @@ int        *first_volume_sizes;       /* 1D array to hold sizes for 1st vol */
 int        first_volume_num_dims;     /* to hold num of dimensions */
 char       **first_volume_dim_names;  /* 1D array of char* to hold the dim names */
 
-Volume     classified_volume;         /* classified volume pointer */
+VIO_Volume     classified_volume;         /* classified volume pointer */
 
 char       **input_filename;          /* 1D char array to hold volume filenames*/
 char       *output_filename;          /* classified volume filename */
@@ -99,35 +99,35 @@ char       **labels;                  /* array of labels indicating classes */
 char       **class_name = NULL;       /* array indicating class names */
 int        *class_count;              /* array indicating each class count */
 int        max_class_index = 0;       /* highest class number to set voxelmax */
-Real       **tags;                    /* matrix to hold world coordinates */
+VIO_Real       **tags;                    /* matrix to hold world coordinates */
 
 int        v1_ptr, v2_ptr, v3_ptr;    /* pointer to voxels 1 2 and 3 */
 
-Real       fuzzy_image_min = 0.0;    /* fuzzy volume image min & max */
-Real       fuzzy_image_max = 1.0;
-Real       fuzzy_voxel_min = 0.0;    /* fuzzy volume voxel min & max */
-Real       fuzzy_voxel_max = 255.0;
+VIO_Real       fuzzy_image_min = 0.0;    /* fuzzy volume image min & max */
+VIO_Real       fuzzy_image_max = 1.0;
+VIO_Real       fuzzy_voxel_min = 0.0;    /* fuzzy volume voxel min & max */
+VIO_Real       fuzzy_voxel_max = 255.0;
   
-Real       **feature_matrix;    /* matrix to hold feature vector of all samples */
+VIO_Real       **feature_matrix;    /* matrix to hold feature vector of all samples */
 
-Real       *feature_vector;     /* vector to hold feature vector of one voxel */
-Real       *apriori_vector;     /* vector to hold apriori class probabilities */
+VIO_Real       *feature_vector;     /* vector to hold feature vector of one voxel */
+VIO_Real       *apriori_vector;     /* vector to hold apriori class probabilities */
 int        *class_column;       /* array of integers indicating class labels */
 
 int        num_classes = 0;     /* the number of classes to be processes */
 
-Real       *class_probs;        /* array to indicate fuzzy class confidence */
+VIO_Real       *class_probs;        /* array to indicate fuzzy class confidence */
 int        *class_labels;       /* array to indicate fuzzy class labels */
 
 char       *mask_filename;        /* filename of the mask volume */
-Volume     mask_volume;           /* volume variable to hold the mask */
-Volume     *train_volume;         /* 1d array variable to hold the tag volumes */
+VIO_Volume     mask_volume;           /* volume variable to hold the mask */
+VIO_Volume     *train_volume;         /* 1d array variable to hold the tag volumes */
 
 int        user_mask_class = 0;   /* default class value for masked voxels */
-Real       user_mask_value = 1.0; /* default mask value for masked voxels */
+VIO_Real       user_mask_value = 1.0; /* default mask value for masked voxels */
 int        block_sizes[3] = {1,1,1};        /* default block size, (1 voxel) */
 int        user_block_sizes[3] = {1,-1,-1}; /* user_selected block size (1slice) */
-Real       output_range[2] = { -MAXDOUBLE, -MAXDOUBLE }; /* range of output values */
+VIO_Real       output_range[2] = { -MAXDOUBLE, -MAXDOUBLE }; /* range of output values */
 int        supervised;                      /* denote type of classifier */
 int        num_train_vols = 0;              /* number of training volumes specified */
 
