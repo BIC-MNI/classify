@@ -70,7 +70,7 @@ my $count=`mincstats -q -count $tmpdir/diff.mnc`;
 my $sum2=`mincstats -q -sum2 $tmpdir/diff.mnc`;
 
 chomp($mean);chomp($count);chomp($sum2);
-#print "mean=$mean count=$count sum2=$sum2\n";
+print "mean=$mean count=$count sum2=$sum2\n" if $verbose;
 
 my $rms=sqrt($sum2/$count);
 

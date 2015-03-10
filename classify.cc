@@ -861,21 +861,43 @@ void create_empty_classified_volume(void)
 ---------------------------------------------------------------------------- */
 void load_tag_file ( char *tag_filename )
 {
+  int *structure_ids;
+  int i;
 
   if (verbose)
     (void) fprintf(stdout, "Loading  tagfile %s\n", tagfile_filename);
 
   /* tag file should be opened here */
   if ( input_tag_file(tag_filename, &n_tag_volumes, &num_samples,
-		      &tags, NULL, NULL, NULL, NULL, &labels ) != VIO_OK ) {
+		      &tags, NULL, NULL, &structure_ids, NULL, &labels ) != VIO_OK ) {
 
-    printf("Error reading the tag file.\n");
+    fprintf(stderr, "Error reading the tag file.\n");
     exit(EXIT_FAILURE);
+  }
+
+  /*
+   * Check that the labels were specified as expected. If not, substitute
+   * the structure_id if available. If neither field is present in a tag 
+   * point, then the tag file is invalid and we cannot proceed.
+   */
+  for (i = 0; i < num_samples; i++) {
+    if (labels[i] == NULL) {
+      if (structure_ids[i] >= 0) {
+        char label[128];
+        sprintf(label, "%d", structure_ids[i]);
+        labels[i] = create_string(label);
+      }
+      else {
+        fprintf(stderr, "Error in tag file, neither structure id nor label found.\n");
+        exit(EXIT_FAILURE);
+      }
+    }
   }
 
   if ( n_tag_volumes == 2 ) 
     printf("Tag file contains two volumes, using the first one.\n");
 
+  FREE(structure_ids);
 }
 
 
@@ -920,7 +942,7 @@ void load_train_volumes(char **trainvol_filename)
 
     if ( !volume_size_is_ok( train_volume[i] ) ) {
       
-      fprintf( stderr, "in training volume %s\n", trainvol_filename);
+      fprintf( stderr, "in training volume %s\n", trainvol_filename[i]);
       exit(EXIT_FAILURE);
     }
 
