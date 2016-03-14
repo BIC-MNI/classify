@@ -1950,3 +1950,4 @@ int volume_size_is_ok( VIO_Volume loaded_volume)
             
 } /* volume_size_is_ok */
         
+/* kate: tab-width 8; indent-mode cstyle; indent-width 8; replace-tabs on; */
