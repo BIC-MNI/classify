@@ -1831,14 +1831,6 @@ void cleanup_memory(void)
   free_tag_points(n_tag_volumes, num_samples,
 		  tags, NULL, NULL, NULL, NULL, labels );
 
-  /* dump unreleased memory to a file */
-  if ( debug >= 10 ) {
-
-    char mem_filename[] = "./memory.debug";
-    fprintf( stdout, "Writing memory stuff to %s\n", mem_filename);
-    output_alloc_to_file(mem_filename);
-  }
-
 } /* cleanup_memory(void)  */
 
 /* ----------------------------- MNI Header -----------------------------------
