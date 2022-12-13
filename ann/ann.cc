@@ -17,6 +17,10 @@ $Author: claude $
 $Date: 2011-05-27 20:47:01 $
 $State: Exp $
 --------------------------------------------------------------------------*/
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <assert.h>
 #include "EBTKS/Minc.h"
 #include "EBTKS/FileIO.h"
