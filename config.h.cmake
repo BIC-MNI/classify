@@ -28,6 +28,11 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #cmakedefine HAVE_UNISTD_H 1
 
+/* Define to 1 if you have the `finite' function. */
+#cmakedefine HAVE_FINITE 1
+
+/* Define to 1 if you have the `isfinite' function. */
+#cmakedefine HAVE_ISFINITE 1
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
