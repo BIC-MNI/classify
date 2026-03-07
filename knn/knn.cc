@@ -134,7 +134,7 @@ void knn_init_training(char *param_filename)
     fscanf( knn_par_file, "knn=%d\n", &knn);
  
     /* scan for the neighbourhood proxemity number */
-    fscanf( knn_par_file, "m=%f\n", &m);
+    fscanf( knn_par_file, "m=%lf\n", &m);
      
     fclose(knn_par_file);
 

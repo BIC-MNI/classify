@@ -1467,16 +1467,16 @@ void write_report(int volume_index)
 
     fprintf(flag?stdout:matrep, "%5d  ",r);
     for_less(c, 0, view_class_size) 
-      fprintf(flag?stdout:matrep, "%9d ", c_matrix[r][c]);
-    fprintf(flag?stdout:matrep, "%9d\n", c_matrix[r][class_total]);
+      fprintf(flag?stdout:matrep, "%9ld ", c_matrix[r][c]);
+    fprintf(flag?stdout:matrep, "%9ld\n", c_matrix[r][class_total]);
 
   }
 
-  fprintf(flag?stdout:matrep, "\nTotal  ",r);
+  fprintf(flag?stdout:matrep, "\nTotal  ");
   for_less(c, 0, view_class_size) 
-    fprintf(flag?stdout:matrep, "%9d ", c_matrix[class_total][c]);
+    fprintf(flag?stdout:matrep, "%9ld ", c_matrix[class_total][c]);
 
-  fprintf(flag?stdout:matrep, "%9d\n\n", c_matrix[class_total][class_total] );  
+  fprintf(flag?stdout:matrep, "%9ld\n\n", c_matrix[class_total][class_total] );  
 
   fprintf(flag?stdout:matrep, "Collapsed confusion matrix statistics discribing different similarity measures: \n\n ");
   fprintf(flag?stdout:matrep, "Class   Kappa   CKappa  AZSM    Sensit. Error   Specif. Accuracy\n\n");

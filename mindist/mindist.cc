@@ -151,7 +151,7 @@ void minimum_distance_init_training(char *param_filename)
     }
     
    /* scan for the neighbourhood proxemity number */
-    fscanf( min_par_file, "m=%f\n", &m);
+    fscanf( min_par_file, "m=%lf\n", &m);
      
     fclose(min_par_file);
 
