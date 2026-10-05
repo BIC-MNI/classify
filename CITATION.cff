@@ -1,0 +1,56 @@
+# Citation metadata for classify (Citation File Format, https://citation-file-format.github.io/).
+# The author list comes from the commit history and from the history comments in the files.
+
+cff-version: 1.2.0
+title: classify
+message: >-
+  If you use this software, please cite it using the metadata from this file.
+type: software
+authors:
+  - given-names: Alex P.
+    family-names: Zijdenbos
+  - given-names: Vasken
+    family-names: Kollokian
+  - given-names: Jason
+    family-names: Lerch
+    orcid: "https://orcid.org/0000-0001-6164-2881"
+  - given-names: Vladimir
+    family-names: Fonov
+    email: vladimir.fonov@gmail.com
+    affiliation: McGill University
+    orcid: "https://orcid.org/0000-0003-3402-7749"
+  - given-names: Peter
+    family-names: Neelin
+  - given-names: Claude
+    family-names: Lepage
+  - given-names: Robert D.
+    family-names: Vincent
+  - given-names: Andrew L.
+    family-names: Janke
+    orcid: "https://orcid.org/0000-0003-0547-5171"
+  - given-names: Chris
+    family-names: Cocosco
+  - given-names: John G.
+    family-names: Sled
+    orcid: "https://orcid.org/0000-0002-4461-283X"
+  - given-names: Samson
+    family-names: Antel
+  - given-names: D. Louis
+    family-names: Collins
+    affiliation: McGill University
+    orcid: "https://orcid.org/0000-0002-8432-7021"
+  - given-names: David
+    family-names: MacDonald
+  - given-names: Greg
+    family-names: Ward
+  - given-names: Samir
+    family-names: Das
+repository-code: "https://github.com/BIC-MNI/classify"
+abstract: Tissue classification tools for MINC image volumes.
+keywords:
+  - MINC
+  - medical imaging
+  - neuroimaging
+  - MRI
+  - tissue classification
+license-url: "https://github.com/BIC-MNI/classify/blob/master/COPYING"
